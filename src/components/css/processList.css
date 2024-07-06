@@ -1,0 +1,33 @@
+/* src/components/ProcessList.css */
+.process-list {
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.process-list table {
+  width: 90%;
+  border-collapse: collapse;
+  margin: auto;
+}
+h2 {
+  text-align: center;
+}
+.process-list th,
+.process-list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.process-list th {
+  background-color: #f2f2f2;
+}
+
+.process-list tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.process-list tr:hover {
+  background-color: #ddd;
+}
