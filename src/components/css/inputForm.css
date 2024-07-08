@@ -1,44 +1,26 @@
-/* src/components/ProcessInputForm.css */
+/* src/components/css/ProcessInputForm.css */
 .process-input-form {
   margin: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  max-width: 400px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.process-input-form h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
+.process-input-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .process-input-form label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.process-input-form input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-top: 5px;
-  font-size: 1em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 
 .process-input-form button {
-  padding: 10px 20px;
-  font-size: 1em;
-  border-radius: 5px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
 }
 
-.process-input-form button:hover {
-  background-color: #0056b3;
+.process-input-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

@@ -3,51 +3,84 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./css/inputForm.css";
 
-const ProcessInputForm = ({ onAddProcess, nextProcessId, onStart }) => {
-  const [name, setName] = useState("");
-  const [arrivalTime, setArrivalTime] = useState("");
-  const [burstTime, setBurstTime] = useState("");
+const ProcessInputForm = ({
+  onAddProcess,
+  nextProcessId,
+  onStart,
+  onReset,
+  isStarted,
+}) => {
+  const [process, setProcess] = useState({
+    id: nextProcessId,
+    name: "",
+    arrivalTime: "",
+    burstTime: "",
+  });
 
-  const handleAddProcess = () => {
-    if (name && arrivalTime && burstTime) {
-      const newProcess = {
-        id: nextProcessId,
-        name,
-        arrivalTime: parseInt(arrivalTime),
-        burstTime: parseInt(burstTime),
-      };
-      onAddProcess(newProcess);
-      setName("");
-      setArrivalTime("");
-      setBurstTime("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProcess((prevProcess) => ({ ...prevProcess, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (process.name && process.arrivalTime && process.burstTime) {
+      onAddProcess({
+        ...process,
+        arrivalTime: parseInt(process.arrivalTime),
+        burstTime: parseInt(process.burstTime),
+      });
+      setProcess({
+        id: nextProcessId + 1,
+        name: "",
+        arrivalTime: "",
+        burstTime: "",
+      });
     }
   };
 
   return (
     <div className="process-input-form">
-      <h2>Process Input Form</h2>
-      <input
-        type="text"
-        placeholder="Process Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        type="number"
-        placeholder="Arrival Time"
-        value={arrivalTime}
-        onChange={(e) => setArrivalTime(e.target.value)}
-      />
-      <input
-        type="number"
-        placeholder="Burst Time"
-        value={burstTime}
-        onChange={(e) => setBurstTime(e.target.value)}
-      />
-      <div className="buttons">
-        <button onClick={handleAddProcess}>Add Process</button>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={process.name}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Arrival Time:
+          <input
+            type="number"
+            name="arrivalTime"
+            value={process.arrivalTime}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Burst Time:
+          <input
+            type="number"
+            name="burstTime"
+            value={process.burstTime}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <button type="submit" disabled={isStarted}>
+          Add Process
+        </button>
+      </form>
+      {!isStarted ? (
         <button onClick={onStart}>Start</button>
-      </div>
+      ) : (
+        <button onClick={onReset}>Reset</button>
+      )}
     </div>
   );
 };
@@ -56,6 +89,8 @@ ProcessInputForm.propTypes = {
   onAddProcess: PropTypes.func.isRequired,
   nextProcessId: PropTypes.number.isRequired,
   onStart: PropTypes.func.isRequired,
+  onReset: PropTypes.func.isRequired,
+  isStarted: PropTypes.bool.isRequired,
 };
 
 export default ProcessInputForm;

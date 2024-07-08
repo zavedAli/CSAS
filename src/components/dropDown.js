@@ -17,12 +17,10 @@ const Dropdown = () => {
         onChange={handleSelectChange}
         className="dropdown-select"
       >
-        <option value="" disabled>
-          Select an option
-        </option>
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
+        <option value="">Choose an Algorithm</option>
+        <option value="SJF">SJF</option>
+        <option value="FCFS">FCFS</option>
+        <option value="Round-Robin Algorithm">Round-Robin Algorithm</option>
       </select>
       {selectedOption && <p>You selected: {selectedOption}</p>}
     </div>

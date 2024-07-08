@@ -3,15 +3,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./css/GanttChart.css";
 
-const getStaticColor = (index) => {
-  const colors = ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"];
-  return colors[index % colors.length];
-};
-
 const GanttChart = ({ processes }) => {
   let currentTime = 0;
-  const scheduledProcesses = processes.map((process, index) => {
-    const { id, name, arrivalTime, burstTime } = process;
+  const scheduledProcesses = processes.map((process) => {
+    const { id, name, arrivalTime, burstTime, color } = process;
     const startTime = Math.max(currentTime, arrivalTime);
     const completionTime = startTime + burstTime;
     currentTime = completionTime;
@@ -20,7 +15,6 @@ const GanttChart = ({ processes }) => {
       ...process,
       startTime,
       completionTime,
-      color: getStaticColor(index),
     };
   });
 
@@ -60,7 +54,7 @@ const GanttChart = ({ processes }) => {
           {scheduledProcesses.map((process) => {
             const { id, name, startTime, burstTime, color } = process;
             const barStyle = {
-              left: `${(startTime / totalTime) * 100}%`,
+              left: ` ${(startTime / totalTime) * 100}%`,
               width: ` ${(burstTime / totalTime) * 100}%`,
               backgroundColor: color,
             };
@@ -126,6 +120,7 @@ GanttChart.propTypes = {
       name: PropTypes.string.isRequired,
       arrivalTime: PropTypes.number.isRequired,
       burstTime: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

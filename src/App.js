@@ -3,51 +3,52 @@ import React, { useState } from "react";
 import "./App.css";
 import Dropdown from "./components/dropDown";
 import ProcessInputForm from "./components/inputForm";
-import GanttChart from "./components/gantChart";
 import ProcessList from "./components/processList";
+import GanttChart from "./components/gantChart";
 import ExecutionQueue from "./components/ExecutionQueue";
+
+const getStaticColor = (index) => {
+  const colors = ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"];
+  return colors[index % colors.length];
+};
 
 function App() {
   const [processes, setProcesses] = useState([]);
   const [nextProcessId, setNextProcessId] = useState(1);
+  const [isStarted, setIsStarted] = useState(false);
 
   const handleAddProcess = (newProcess) => {
+    newProcess.color = getStaticColor(nextProcessId - 1);
     setProcesses((prevProcesses) => [...prevProcesses, newProcess]);
     setNextProcessId((prevId) => prevId + 1);
-    logProcesses([...processes, newProcess]);
   };
 
-  const logProcesses = (processes) => {
-    console.log("Current Processes:");
-    processes.forEach((process, index) => {
-      console.log(
-        ` Process ${index + 1}: ID=${process.id}, Name=${
-          process.name
-        }, Arrival Time=${process.arrivalTime}, Burst Time=${process.burstTime}`
-      );
-    });
-  };
   const handleStart = () => {
-    console.log(processes);
+    setIsStarted(true);
+    console.log("Starting with processes:", processes);
+  };
+
+  const handleReset = () => {
+    setProcesses([]);
+    setNextProcessId(1);
+    setIsStarted(false);
   };
 
   return (
     <>
       <div className="App">
-        <div className="centered-container">
-          <Dropdown />
-        </div>
-        <div className="centered-container">
-          <ProcessInputForm
-            onAddProcess={handleAddProcess}
-            nextProcessId={nextProcessId}
-            onStart={handleStart}
-          />
-        </div>
+        <Dropdown />
+        <ProcessInputForm
+          onAddProcess={handleAddProcess}
+          nextProcessId={nextProcessId}
+          onStart={handleStart}
+          onReset={handleReset}
+          isStarted={isStarted}
+        />
         <ProcessList processes={processes} />
       </div>
       <GanttChart processes={processes} />
-      <ExecutionQueue processes={processes} />
+      <ExecutionQueue processes={processes} isStarted={isStarted} />
     </>
   );
 }

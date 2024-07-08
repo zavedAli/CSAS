@@ -1,109 +1,103 @@
 // src/components/ExecutionQueue.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import "./css/GanttChart.css"; // Reuse the same CSS
+import { getNextProcess, getPreviousProcess } from "../algorithm/fcfs";
+import "./css/executionQueue.css";
 
-const getStaticColor = (index) => {
-  const colors = ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"];
-  return colors[index % colors.length];
-};
+const ExecutionQueue = ({ processes, isStarted }) => {
+  const [executedProcesses, setExecutedProcesses] = useState([]);
+  const [scheduledProcesses, setScheduledProcesses] = useState([]);
 
-const ExecutionQueue = ({ processes }) => {
-  const totalTime = processes.reduce(
-    (maxTime, process) =>
-      Math.max(maxTime, process.arrivalTime + process.burstTime),
+  useEffect(() => {
+    const scheduleProcesses = () => {
+      let currentTime = 0;
+      return processes
+        .slice()
+        .sort(
+          (a, b) => a.arrivalTime - b.arrivalTime || a.burstTime - b.burstTime
+        )
+        .map((process) => {
+          const startTime = Math.max(currentTime, process.arrivalTime);
+          const completionTime = startTime + process.burstTime;
+          currentTime = completionTime;
+          return {
+            ...process,
+            startTime,
+            completionTime,
+          };
+        });
+    };
+    setScheduledProcesses(scheduleProcesses());
+  }, [processes]);
+
+  const handleNext = () => {
+    const nextProcess = getNextProcess(scheduledProcesses, executedProcesses);
+    if (nextProcess) {
+      setExecutedProcesses([...executedProcesses, nextProcess.id]);
+    }
+  };
+
+  const handlePrevious = () => {
+    const newExecutedProcesses = [...executedProcesses];
+    newExecutedProcesses.pop();
+    setExecutedProcesses(newExecutedProcesses);
+  };
+
+  const displayedProcesses = scheduledProcesses.filter((process) =>
+    executedProcesses.includes(process.id)
+  );
+
+  const totalTime = scheduledProcesses.reduce(
+    (maxTime, process) => Math.max(maxTime, process.completionTime),
     0
   );
 
-  let currentTime = 0;
-  const scheduledProcesses = processes.map((process, index) => {
-    const { id, name, arrivalTime, burstTime } = process;
-    const startTime = Math.max(currentTime, arrivalTime);
-    const completionTime = startTime + burstTime;
-    currentTime = completionTime;
-
-    return {
-      ...process,
-      startTime,
-      completionTime,
-      color: getStaticColor(index),
-    };
-  });
-
-  const timeIntervals = Array.from({ length: totalTime + 1 }, (_, i) => i);
-
-  // Generate segments for "idle" time
-  const idleSegments = [];
-  let lastEndTime = 0;
-
-  scheduledProcesses.forEach((process) => {
-    if (process.startTime > lastEndTime) {
-      idleSegments.push({
-        startTime: lastEndTime,
-        endTime: process.startTime,
-      });
-    }
-    lastEndTime = process.completionTime;
-  });
-
-  if (lastEndTime < totalTime) {
-    idleSegments.push({
-      startTime: lastEndTime,
-      endTime: totalTime,
-    });
-  }
-
   return (
-    <div>
-      <div>
-        <h3>Execution Queue</h3>
-        <div className="gantt-chart">
-          {scheduledProcesses.map((process) => {
-            const { id, name, startTime, burstTime, color } = process;
-            const barStyle = {
-              left: ` ${(startTime / totalTime) * 100}%`,
-              width: `${(burstTime / totalTime) * 100}%`,
-              backgroundColor: color,
-            };
-            return (
-              <div key={id} className="gantt-bar" style={barStyle}>
-                <div className="gantt-bar-text">
-                  {name} (ID: {id})
-                </div>
-                <div className="gantt-bar-time">
-                  <span className="start-time">{startTime}</span>
-                  <span className="end-time">{startTime + burstTime}</span>
-                </div>
+    <div className="execution-queue">
+      <h3>Execution Queue</h3>
+      <div className="gantt-chart">
+        {displayedProcesses.map((process) => {
+          const { id, name, startTime, burstTime, color } = process;
+          const barStyle = {
+            left: ` ${(startTime / totalTime) * 100}%`,
+            width: ` ${(burstTime / totalTime) * 100}%`,
+            backgroundColor: color,
+          };
+          return (
+            <div key={id} className="gantt-bar" style={barStyle}>
+              <div className="gantt-bar-text">
+                {name} (ID: {id})
               </div>
-            );
-          })}
-          {/* Render idle segments */}
-          {idleSegments.map((segment, index) => {
-            const { startTime, endTime } = segment;
-            const idleWidth = ((endTime - startTime) / totalTime) * 100;
-            const idleStyle = {
-              left: ` ${(startTime / totalTime) * 100}%`,
-              width: `${idleWidth}%`,
-              backgroundColor: "#ccc", // Idle color
-            };
-            return (
-              <div
-                key={`idle-${index}`}
-                className="gantt-idle"
-                style={idleStyle}
-              >
-                Idle
+              <div className="gantt-bar-time">
+                <span className="start-time">{startTime}</span>
+                <span className="end-time">{startTime + burstTime}</span>
               </div>
-            );
-          })}
-        </div>
-        <div className="gantt-timeline">
-          {timeIntervals.map((time) => (
-            <div key={time} className="gantt-timeline-marker">
-              {time}
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
+      <div className="gantt-timeline">
+        {Array.from({ length: totalTime + 1 }, (_, i) => (
+          <div key={i} className="gantt-timeline-marker">
+            {i}
+          </div>
+        ))}
+      </div>
+      <div className="execution-buttons">
+        <button
+          onClick={handlePrevious}
+          disabled={!isStarted || executedProcesses.length === 0}
+        >
+          Previous
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={
+            !isStarted || executedProcesses.length === scheduledProcesses.length
+          }
+        >
+          Next
+        </button>
       </div>
     </div>
   );
@@ -116,8 +110,10 @@ ExecutionQueue.propTypes = {
       name: PropTypes.string.isRequired,
       arrivalTime: PropTypes.number.isRequired,
       burstTime: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
     })
   ).isRequired,
+  isStarted: PropTypes.bool.isRequired,
 };
 
 export default ExecutionQueue;
