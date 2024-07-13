@@ -49,7 +49,7 @@ const GanttChart = ({ processes }) => {
   return (
     <div>
       <div>
-        <h3>Gantt Chart</h3>
+        <h3>Timeline Chart</h3>
         <div className="gantt-chart">
           {scheduledProcesses.map((process) => {
             const { id, name, startTime, burstTime, color } = process;

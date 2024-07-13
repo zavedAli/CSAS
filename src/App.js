@@ -16,6 +16,7 @@ function App() {
   const [processes, setProcesses] = useState([]);
   const [nextProcessId, setNextProcessId] = useState(1);
   const [isStarted, setIsStarted] = useState(false);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
 
   const handleAddProcess = (newProcess) => {
     newProcess.color = getStaticColor(nextProcessId - 1);
@@ -34,10 +35,17 @@ function App() {
     setIsStarted(false);
   };
 
+  const handleAlgorithmChange = (e) => {
+    setSelectedAlgorithm(e.target.value);
+  };
+
   return (
     <>
       <div className="App">
-        <Dropdown />
+        <Dropdown
+          selectedOption={selectedAlgorithm}
+          onSelectChange={handleAlgorithmChange}
+        />
         <ProcessInputForm
           onAddProcess={handleAddProcess}
           nextProcessId={nextProcessId}
@@ -48,7 +56,11 @@ function App() {
         <ProcessList processes={processes} />
       </div>
       <GanttChart processes={processes} />
-      <ExecutionQueue processes={processes} isStarted={isStarted} />
+      <ExecutionQueue
+        processes={processes}
+        isStarted={isStarted}
+        selectedAlgorithm={selectedAlgorithm}
+      />
     </>
   );
 }

@@ -1,30 +1,30 @@
 // src/components/Dropdown.js
-import React, { useState } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import "./css/dropDown.css"; // Import the CSS file
 
-const Dropdown = () => {
-  const [selectedOption, setSelectedOption] = useState("");
-
-  const handleSelectChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
-
+const Dropdown = ({ selectedOption, onSelectChange }) => {
   return (
     <div className="dropdown-container">
       <h2>Select Algorithm</h2>
       <select
         value={selectedOption}
-        onChange={handleSelectChange}
+        onChange={onSelectChange}
         className="dropdown-select"
       >
         <option value="">Choose an Algorithm</option>
         <option value="SJF">SJF</option>
         <option value="FCFS">FCFS</option>
-        <option value="Round-Robin Algorithm">Round-Robin Algorithm</option>
+        <option value="Round-Robin">Round-Robin</option>
       </select>
       {selectedOption && <p>You selected: {selectedOption}</p>}
     </div>
   );
+};
+
+Dropdown.propTypes = {
+  selectedOption: PropTypes.string.isRequired,
+  onSelectChange: PropTypes.func.isRequired,
 };
 
 export default Dropdown;

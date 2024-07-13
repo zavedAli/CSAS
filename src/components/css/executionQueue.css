@@ -1,6 +1,31 @@
 /* src/components/css/executionQueue.css */
 .execution-queue {
   margin-top: 20px;
+  padding: 20px;
+  background-color: #f5f5f5b7;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+
+.current-info {
+  margin-bottom: 10px;
+}
+.current-time {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.arrived-processes {
+  font-size: 16px;
+}
+
+.arrived-processes {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .execution-queue-chart {
@@ -82,4 +107,10 @@
 .execution-buttons button:disabled {
   cursor: not-allowed;
   background-color: #ccc;
+}
+/* src/components/css/executionQueue.css */
+.gantt-bar.idle {
+  background-color: #e0e0e0;
+  color: #888;
+  border: 1px dashed #888;
 }

@@ -100,3 +100,8 @@ li {
   font-weight: bold;
   font-size: x;
 }
+.gantt-bar.idle {
+  background-color: #e0e0e0;
+  color: #888;
+  border: 1px dashed #888;
+}
