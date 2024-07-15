@@ -40,36 +40,31 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
   const handleNext = () => {
     let nextProcess;
     if (selectedAlgorithm === "SJF") {
-      nextProcess = getNextProcessSJF(
-        scheduledProcesses,
-        executedProcesses,
-        currentTime
-      );
+      nextProcess = getNextProcessSJF(scheduledProcesses, executedProcesses);
     } else {
-      nextProcess = getNextProcess(
-        scheduledProcesses,
-        executedProcesses,
-        currentTime
-      );
+      nextProcess = getNextProcess(scheduledProcesses, executedProcesses);
     }
 
     if (nextProcess) {
-      const newStartTime =
-        executedProcesses.length === 0 ? nextProcess.arrivalTime : currentTime;
       const updatedProcesses = scheduledProcesses.map((process) =>
         process.id === nextProcess.id
           ? {
               ...process,
-              startTime: newStartTime,
-              completionTime: newStartTime + nextProcess.burstTime,
-              waitingTime: newStartTime - process.arrivalTime,
+              startTime: Math.max(currentTime, nextProcess.arrivalTime),
+              completionTime:
+                Math.max(currentTime, nextProcess.arrivalTime) +
+                nextProcess.burstTime,
+              waitingTime:
+                Math.max(currentTime, nextProcess.arrivalTime) -
+                process.arrivalTime,
             }
           : process
       );
-
       setScheduledProcesses(updatedProcesses);
       setExecutedProcesses([...executedProcesses, nextProcess.id]);
-      setCurrentTime(newStartTime + nextProcess.burstTime);
+      setCurrentTime(
+        Math.max(currentTime, nextProcess.arrivalTime) + nextProcess.burstTime
+      );
     }
   };
 
@@ -93,11 +88,16 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
 
     setScheduledProcesses(updatedProcesses);
     setExecutedProcesses(executedProcesses.slice(0, -1));
-    setCurrentTime(
-      executedProcesses.length === 1
-        ? 0
-        : currentTime - lastExecutedProcess.burstTime
-    );
+
+    const newCurrentTime =
+      executedProcesses.length > 1
+        ? scheduledProcesses.find(
+            (process) =>
+              process.id === executedProcesses[executedProcesses.length - 2]
+          ).completionTime
+        : 0;
+
+    setCurrentTime(newCurrentTime);
   };
 
   const handleGenerateReport = () => {
@@ -114,22 +114,49 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
     0
   );
 
+  const arrivedProcesses = scheduledProcesses.filter(
+    (process) => process.arrivalTime <= currentTime
+  );
+
+  const waitingProcesses = arrivedProcesses.filter(
+    (process) => !executedProcesses.includes(process.id)
+  );
+
+  const executedProcessesInfo = scheduledProcesses.filter((process) =>
+    executedProcesses.includes(process.id)
+  );
+
   return (
     <div className="execution-queue">
       <h3>Execution Queue</h3>
-      <div className="current-time">
-        <strong>Current Time:</strong> {currentTime}
-      </div>
-      <div className="arrived-processes">
-        <strong>Processes Arrived:</strong>
-        {scheduledProcesses
-          .filter((process) => process.arrivalTime <= currentTime)
-          .map((process) => (
-            <span key={process.id}>
-              {", "}
-              {process.name} (ID: {process.id})
+      <div className="current-info">
+        <div className="current-time">
+          <strong>Current Time :</strong> {currentTime}
+        </div>
+        <div className="arrived-processes">
+          <strong>Processes Arrived : </strong>
+          {arrivedProcesses.map((process) => (
+            <span key={process.id} className="arrived-process">
+              {process.name} (ID: {process.id}),
             </span>
           ))}
+        </div>
+        <div className="waiting-processes">
+          <strong>Processes Waiting : </strong>
+          {waitingProcesses.map((process) => (
+            <span key={process.id} className="waiting-process">
+              {process.name} (ID: {process.id}),
+            </span>
+          ))}
+        </div>
+        <div className="executed-processes">
+          <strong>Processes Executed : </strong>
+          {executedProcessesInfo.map((process) => (
+            <span key={process.id} className="executed-process">
+              {process.name} (ID: {process.id}),
+            </span>
+          ))}
+        </div>
       </div>
       <div className="gantt-chart">
         {displayedProcesses.map((process) => {
