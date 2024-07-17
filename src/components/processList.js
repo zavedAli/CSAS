@@ -14,6 +14,7 @@ const ProcessList = ({ processes }) => {
             <th>Name</th>
             <th>Arrival Time</th>
             <th>Burst Time</th>
+            <th>Priority</th>
           </tr>
         </thead>
         <tbody>
@@ -23,6 +24,9 @@ const ProcessList = ({ processes }) => {
               <td>{process.name}</td>
               <td>{process.arrivalTime}</td>
               <td>{process.burstTime}</td>
+              <td>
+                {process.priority !== undefined ? process.priority : "N/A"}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -38,6 +42,7 @@ ProcessList.propTypes = {
       name: PropTypes.string.isRequired,
       arrivalTime: PropTypes.number.isRequired,
       burstTime: PropTypes.number.isRequired,
+      priority: PropTypes.number, // Add priority as an optional field
     })
   ).isRequired,
 };

@@ -39,10 +39,25 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
 
   const handleNext = () => {
     let nextProcess;
-    if (selectedAlgorithm === "SJF") {
-      nextProcess = getNextProcessSJF(scheduledProcesses, executedProcesses);
+
+    if (currentTime === 0) {
+      if (selectedAlgorithm === "SJF") {
+        nextProcess = scheduledProcesses
+          .filter((process) => !executedProcesses.includes(process.id))
+          .sort(
+            (a, b) => a.arrivalTime - b.arrivalTime || a.burstTime - b.burstTime
+          )[0];
+      } else {
+        nextProcess = scheduledProcesses
+          .filter((process) => !executedProcesses.includes(process.id))
+          .sort((a, b) => a.arrivalTime - b.arrivalTime)[0];
+      }
     } else {
-      nextProcess = getNextProcess(scheduledProcesses, executedProcesses);
+      if (selectedAlgorithm === "SJF") {
+        nextProcess = getNextProcessSJF(scheduledProcesses, executedProcesses);
+      } else {
+        nextProcess = getNextProcess(scheduledProcesses, executedProcesses);
+      }
     }
 
     if (nextProcess) {

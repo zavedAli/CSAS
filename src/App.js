@@ -52,6 +52,7 @@ function App() {
           onStart={handleStart}
           onReset={handleReset}
           isStarted={isStarted}
+          selectedAlgorithm={selectedAlgorithm} // Pass the prop here
         />
         <ProcessList processes={processes} />
       </div>

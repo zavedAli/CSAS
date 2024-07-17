@@ -15,7 +15,7 @@ const Dropdown = ({ selectedOption, onSelectChange }) => {
         <option value="">Choose an Algorithm</option>
         <option value="SJF">SJF</option>
         <option value="FCFS">FCFS</option>
-        <option value="Round-Robin">Round-Robin</option>
+        <option value="Priority">Priority Algorithm</option>
       </select>
       {selectedOption && <p>You selected: {selectedOption}</p>}
     </div>
