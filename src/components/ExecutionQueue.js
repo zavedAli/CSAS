@@ -40,24 +40,21 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
   const handleNext = () => {
     let nextProcess;
 
-    if (currentTime === 0) {
-      if (selectedAlgorithm === "SJF") {
-        nextProcess = scheduledProcesses
-          .filter((process) => !executedProcesses.includes(process.id))
-          .sort(
-            (a, b) => a.arrivalTime - b.arrivalTime || a.burstTime - b.burstTime
-          )[0];
-      } else {
-        nextProcess = scheduledProcesses
-          .filter((process) => !executedProcesses.includes(process.id))
-          .sort((a, b) => a.arrivalTime - b.arrivalTime)[0];
-      }
+    // Check if there are processes waiting to be executed
+    const waitingProcesses = scheduledProcesses.filter(
+      (process) =>
+        process.arrivalTime <= currentTime &&
+        !executedProcesses.includes(process.id)
+    );
+
+    if (waitingProcesses.length > 0) {
+      // Sort waiting processes by burst time and select the one with the minimum burst time
+      nextProcess = waitingProcesses.sort(
+        (a, b) => a.burstTime - b.burstTime
+      )[0];
     } else {
-      if (selectedAlgorithm === "SJF") {
-        nextProcess = getNextProcessSJF(scheduledProcesses, executedProcesses);
-      } else {
-        nextProcess = getNextProcess(scheduledProcesses, executedProcesses);
-      }
+      // If no processes are waiting, use the usual algorithm (getNextProcessSJF)
+      nextProcess = getNextProcessSJF(scheduledProcesses, executedProcesses);
     }
 
     if (nextProcess) {
