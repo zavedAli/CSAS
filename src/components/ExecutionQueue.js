@@ -1,15 +1,20 @@
-// src/components/ExecutionQueue.js
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { getNextProcess, getPreviousProcess } from "../algorithm/fcfs";
 import { getNextProcessSJF, getPreviousProcessSJF } from "../algorithm/sjf";
+import {
+  getNextProcessPriority,
+  getPreviousProcessPriority,
+} from "../algorithm/priority";
 import InfoBox from "./infoBox";
+import Report from "./Report";
 import "./css/executionQueue.css";
 
 const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
   const [executedProcesses, setExecutedProcesses] = useState([]);
   const [scheduledProcesses, setScheduledProcesses] = useState([]);
-  const [currentTime, setCurrentTime] = useState(0); // Track current time
+  const [currentTime, setCurrentTime] = useState(0);
+  const [showReport, setShowReport] = useState(false);
 
   useEffect(() => {
     const scheduleProcesses = () => {
@@ -19,6 +24,12 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
           .slice()
           .sort(
             (a, b) => a.arrivalTime - b.arrivalTime || a.burstTime - b.burstTime
+          );
+      } else if (selectedAlgorithm === "Priority") {
+        sortedProcesses = processes
+          .slice()
+          .sort(
+            (a, b) => a.arrivalTime - b.arrivalTime || b.priority - a.priority
           );
       } else {
         sortedProcesses = processes
@@ -34,27 +45,54 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
       }));
     };
     setScheduledProcesses(scheduleProcesses());
-    setCurrentTime(0); // Reset current time on processes change
+    setCurrentTime(0);
   }, [processes, selectedAlgorithm]);
 
   const handleNext = () => {
     let nextProcess;
 
-    // Check if there are processes waiting to be executed
-    const waitingProcesses = scheduledProcesses.filter(
-      (process) =>
-        process.arrivalTime <= currentTime &&
-        !executedProcesses.includes(process.id)
-    );
-
-    if (waitingProcesses.length > 0) {
-      // Sort waiting processes by burst time and select the one with the minimum burst time
-      nextProcess = waitingProcesses.sort(
-        (a, b) => a.burstTime - b.burstTime
-      )[0];
+    if (currentTime === 0) {
+      nextProcess = scheduledProcesses
+        .filter((process) => !executedProcesses.includes(process.id))
+        .sort(
+          (a, b) => a.arrivalTime - b.arrivalTime || a.burstTime - b.burstTime
+        )[0];
     } else {
-      // If no processes are waiting, use the usual algorithm (getNextProcessSJF)
-      nextProcess = getNextProcessSJF(scheduledProcesses, executedProcesses);
+      const waitingProcesses = scheduledProcesses.filter(
+        (process) =>
+          process.arrivalTime <= currentTime &&
+          !executedProcesses.includes(process.id)
+      );
+
+      if (waitingProcesses.length > 0) {
+        if (selectedAlgorithm === "SJF") {
+          nextProcess = waitingProcesses.sort(
+            (a, b) => a.burstTime - b.burstTime
+          )[0];
+        } else if (selectedAlgorithm === "Priority") {
+          nextProcess = waitingProcesses.sort(
+            (a, b) => b.priority - a.priority
+          )[0];
+        } else {
+          nextProcess = waitingProcesses.sort(
+            (a, b) => a.arrivalTime - b.arrivalTime
+          )[0];
+        }
+      } else {
+        if (selectedAlgorithm === "SJF") {
+          nextProcess = getNextProcessSJF(
+            scheduledProcesses,
+            executedProcesses
+          );
+        } else if (selectedAlgorithm === "Priority") {
+          nextProcess = getNextProcessPriority(
+            scheduledProcesses,
+            executedProcesses
+          );
+        } else {
+          nextProcess = getNextProcess(scheduledProcesses, executedProcesses);
+        }
+      }
     }
 
     if (nextProcess) {
@@ -113,7 +151,11 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
   };
 
   const handleGenerateReport = () => {
-    console.log("Generating report for executed processes:", executedProcesses);
+    setShowReport(true);
+  };
+
+  const closeReport = () => {
+    setShowReport(false);
   };
 
   const displayedProcesses = scheduledProcesses.filter((process) =>
@@ -174,7 +216,7 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
         {displayedProcesses.map((process) => {
           const { id, name, startTime, burstTime, color } = process;
           const barStyle = {
-            left: `${(startTime / totalTime) * 100}%`,
+            left: ` ${(startTime / totalTime) * 100}%`,
             width: ` ${(burstTime / totalTime) * 100}%`,
             backgroundColor: color,
           };
@@ -215,6 +257,14 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
           Next
         </button>
       </div>
+      {showReport && (
+        <Report
+          processes={scheduledProcesses.filter((process) =>
+            executedProcesses.includes(process.id)
+          )}
+          onClose={closeReport}
+        />
+      )}
     </div>
   );
 };
@@ -226,6 +276,7 @@ ExecutionQueue.propTypes = {
       name: PropTypes.string.isRequired,
       arrivalTime: PropTypes.number.isRequired,
       burstTime: PropTypes.number.isRequired,
+      priority: PropTypes.number.isRequired,
       color: PropTypes.string.isRequired,
     })
   ).isRequired,
