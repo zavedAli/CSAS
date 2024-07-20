@@ -5,7 +5,7 @@ import Dropdown from "./components/dropDown";
 import ProcessInputForm from "./components/inputForm";
 import ProcessList from "./components/processList";
 import GanttChart from "./components/gantChart";
-import ExecutionQueue from "./components/ExecutionQueue";
+import ExecutionQueue from "./components/kernel/ExecutionQueue";
 
 const getStaticColor = (index) => {
   const colors = ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"];

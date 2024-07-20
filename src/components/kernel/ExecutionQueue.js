@@ -1,19 +1,22 @@
+// src/components/ExecutionQueue.js
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { getNextProcess, getPreviousProcess } from "../algorithm/fcfs";
-import { getNextProcessSJF, getPreviousProcessSJF } from "../algorithm/sjf";
-import {
-  getNextProcessPriority,
-  getPreviousProcessPriority,
-} from "../algorithm/priority";
-import InfoBox from "./infoBox";
-import Report from "./Report";
-import "./css/executionQueue.css";
+import { getNextProcess } from "../../algorithm/fcfs";
+import { getNextProcessSJF } from "../../algorithm/sjf";
+import { getNextProcessPriority } from "../../algorithm/priority";
+import ExecutionQueueControls from "./ExecutionQueueControls";
+import ExecutionQueueInfo from "./ExecutionQueueInfo";
+import "../css/executionQueue.css";
+
+// Import the new function
+import { calculateMetrics } from "../../algorithm/processMetrics"; // <-- New import
 
 const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
   const [executedProcesses, setExecutedProcesses] = useState([]);
   const [scheduledProcesses, setScheduledProcesses] = useState([]);
   const [currentTime, setCurrentTime] = useState(0);
+  const [allProcessesScheduled, setAllProcessesScheduled] = useState(false); // <-- New state
+  const [reportData, setReportData] = useState([]);
   const [showReport, setShowReport] = useState(false);
 
   useEffect(() => {
@@ -42,10 +45,13 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
         startTime: null,
         completionTime: null,
         waitingTime: null,
+        responseTime: null, // <-- Added metric
+        turnaroundTime: null, // <-- Added metric
       }));
     };
     setScheduledProcesses(scheduleProcesses());
-    setCurrentTime(0);
+    setCurrentTime(0); // Reset current time on processes change
+    setAllProcessesScheduled(false); // Reset on processes change
   }, [processes, selectedAlgorithm]);
 
   const handleNext = () => {
@@ -107,6 +113,16 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
               waitingTime:
                 Math.max(currentTime, nextProcess.arrivalTime) -
                 process.arrivalTime,
+              responseTime:
+                Math.max(currentTime, nextProcess.arrivalTime) ===
+                process.arrivalTime
+                  ? Math.max(currentTime, nextProcess.arrivalTime) -
+                    process.arrivalTime
+                  : null, // <-- Added response time
+              turnaroundTime:
+                Math.max(currentTime, nextProcess.arrivalTime) +
+                nextProcess.burstTime -
+                process.arrivalTime, // <-- Added turnaround time
             }
           : process
       );
@@ -114,6 +130,11 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
       setExecutedProcesses([...executedProcesses, nextProcess.id]);
       setCurrentTime(
         Math.max(currentTime, nextProcess.arrivalTime) + nextProcess.burstTime
+      );
+
+      // Check if all processes are scheduled
+      setAllProcessesScheduled(
+        executedProcesses.length + 1 === processes.length
       );
     }
   };
@@ -132,6 +153,8 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
             startTime: null,
             completionTime: null,
             waitingTime: null,
+            responseTime: null, // <-- Reset response time
+            turnaroundTime: null, // <-- Reset turnaround time
           }
         : process
     );
@@ -148,14 +171,19 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
         : 0;
 
     setCurrentTime(newCurrentTime);
+    setAllProcessesScheduled(false); // Reset when going back
   };
 
   const handleGenerateReport = () => {
+    // Calculate metrics and generate report here
+    const metrics = calculateMetrics(
+      scheduledProcesses,
+      executedProcesses,
+      currentTime
+    );
+    setReportData(metrics);
     setShowReport(true);
-  };
-
-  const closeReport = () => {
-    setShowReport(false);
+    console.log("Generating report for processes:", metrics);
   };
 
   const displayedProcesses = scheduledProcesses.filter((process) =>
@@ -183,40 +211,17 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
   return (
     <div className="execution-queue">
       <h3>Execution Queue</h3>
-      <div className="current-info">
-        <div className="current-time">
-          <strong>Current Time :</strong> {currentTime}
-        </div>
-        <div className="arrived-processes">
-          <strong>Processes Arrived : </strong>
-          {arrivedProcesses.map((process) => (
-            <span key={process.id} className="arrived-process">
-              {process.name} (ID: {process.id}),
-            </span>
-          ))}
-        </div>
-        <div className="waiting-processes">
-          <strong>Processes Waiting : </strong>
-          {waitingProcesses.map((process) => (
-            <span key={process.id} className="waiting-process">
-              {process.name} (ID: {process.id}),
-            </span>
-          ))}
-        </div>
-        <div className="executed-processes">
-          <strong>Processes Executed : </strong>
-          {executedProcessesInfo.map((process) => (
-            <span key={process.id} className="executed-process">
-              {process.name} (ID: {process.id}),
-            </span>
-          ))}
-        </div>
-      </div>
+      <ExecutionQueueInfo
+        currentTime={currentTime}
+        arrivedProcesses={arrivedProcesses}
+        waitingProcesses={waitingProcesses}
+        executedProcessesInfo={executedProcessesInfo}
+      />
       <div className="gantt-chart">
         {displayedProcesses.map((process) => {
           const { id, name, startTime, burstTime, color } = process;
           const barStyle = {
-            left: ` ${(startTime / totalTime) * 100}%`,
+            left: `${(startTime / totalTime) * 100}%`,
             width: ` ${(burstTime / totalTime) * 100}%`,
             backgroundColor: color,
           };
@@ -240,31 +245,17 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
           </div>
         ))}
       </div>
-      <div className="execution-buttons">
-        <button
-          onClick={handlePrevious}
-          disabled={!isStarted || executedProcesses.length === 0}
-        >
-          Previous
-        </button>
-        <button onClick={handleGenerateReport}>Generate Report</button>
-        <button
-          onClick={handleNext}
-          disabled={
-            !isStarted || executedProcesses.length === scheduledProcesses.length
-          }
-        >
-          Next
-        </button>
-      </div>
-      {showReport && (
-        <Report
-          processes={scheduledProcesses.filter((process) =>
-            executedProcesses.includes(process.id)
-          )}
-          onClose={closeReport}
-        />
-      )}
+      <ExecutionQueueControls
+        isStarted={isStarted}
+        executedProcesses={executedProcesses}
+        scheduledProcesses={scheduledProcesses}
+        handlePrevious={handlePrevious}
+        handleGenerateReport={handleGenerateReport}
+        handleNext={handleNext}
+        allProcessesScheduled={allProcessesScheduled}
+        showReport={showReport}
+        processes={reportData} // <-- Added prop
+      />
     </div>
   );
 };
