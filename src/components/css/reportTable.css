@@ -1,9 +1,9 @@
-/* src/css/reportTable.css */
-.report-table {
-  margin: 20px;
+/* src/css/ReportTable.css */
+.report-table-container {
+  margin-top: 20px;
 }
 
-.report-table table {
+.report-table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -12,9 +12,24 @@
 .report-table td {
   border: 1px solid #ddd;
   padding: 8px;
+  text-align: center;
 }
 
 .report-table th {
   background-color: #f2f2f2;
-  text-align: left;
+  color: #333;
+  font-weight: bold;
+}
+
+.report-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.report-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.report-table tfoot {
+  background-color: #f2f2f2;
+  font-weight: bold;
 }
