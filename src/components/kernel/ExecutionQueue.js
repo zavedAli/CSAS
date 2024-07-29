@@ -255,6 +255,7 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
         allProcessesScheduled={allProcessesScheduled}
         showReport={showReport}
         processes={reportData} // <-- Added prop
+        selectedAlgorithm={selectedAlgorithm}
       />
     </div>
   );

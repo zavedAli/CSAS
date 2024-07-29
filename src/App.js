@@ -6,6 +6,7 @@ import ProcessInputForm from "./components/inputForm";
 import ProcessList from "./components/processList";
 import GanttChart from "./components/gantChart";
 import ExecutionQueue from "./components/kernel/ExecutionQueue";
+import AlgoDes from "./components/algoDes";
 
 const getStaticColor = (index) => {
   const colors = ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"];
@@ -46,6 +47,7 @@ function App() {
           selectedOption={selectedAlgorithm}
           onSelectChange={handleAlgorithmChange}
         />
+        <AlgoDes selectedAlgorithm={selectedAlgorithm} />
         <ProcessInputForm
           onAddProcess={handleAddProcess}
           nextProcessId={nextProcessId}

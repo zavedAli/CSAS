@@ -1,49 +1,64 @@
-// src/components/ReportTable.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./css/reportTable.css";
 
-const ReportTable = ({ processes }) => {
-  const calculateAverages = () => {
-    const totalProcesses = processes.length;
-    const sums = processes.reduce(
-      (acc, process) => {
-        acc.arrivalTime += process.arrivalTime || 0;
-        acc.burstTime += process.burstTime || 0;
-        acc.completionTime += process.completionTime || 0;
-        acc.waitingTime += process.waitingTime || 0;
-        acc.turnaroundTime += process.turnaroundTime || 0;
-        acc.responseTime += process.responseTime || 0;
-        acc.executedTime += process.executedTime || 0;
-        return acc;
-      },
-      {
-        arrivalTime: 0,
-        burstTime: 0,
-        completionTime: 0,
-        waitingTime: 0,
-        turnaroundTime: 0,
-        responseTime: 0,
-        executedTime: 0,
-      }
-    );
+const ReportTable = ({ processes, selectedAlgorithm }) => {
+  const [averages, setAverages] = useState({});
+  const [resultData, setResultData] = useState([]);
+  console.log(selectedAlgorithm);
 
-    return {
-      arrivalTime: (sums.arrivalTime / totalProcesses).toFixed(2),
-      burstTime: (sums.burstTime / totalProcesses).toFixed(2),
-      completionTime: (sums.completionTime / totalProcesses).toFixed(2),
-      waitingTime: (sums.waitingTime / totalProcesses).toFixed(2),
-      turnaroundTime: (sums.turnaroundTime / totalProcesses).toFixed(2),
-      responseTime: (sums.responseTime / totalProcesses).toFixed(2),
-      executedTime: (sums.executedTime / totalProcesses).toFixed(2),
+  useEffect(() => {
+    const calculateAverages = () => {
+      const totalProcesses = processes.length;
+      const sums = processes.reduce(
+        (acc, process) => {
+          acc.arrivalTime += process.arrivalTime || 0;
+          acc.burstTime += process.burstTime || 0;
+          acc.completionTime += process.completionTime || 0;
+          acc.waitingTime += process.waitingTime || 0;
+          acc.turnaroundTime += process.turnaroundTime || 0;
+          acc.responseTime += process.responseTime || 0;
+          acc.executedTime += process.executedTime || 0;
+          return acc;
+        },
+        {
+          arrivalTime: 0,
+          burstTime: 0,
+          completionTime: 0,
+          waitingTime: 0,
+          turnaroundTime: 0,
+          responseTime: 0,
+          executedTime: 0,
+        }
+      );
+
+      const averages = {
+        algoType: selectedAlgorithm,
+        arrivalTime: (sums.arrivalTime / totalProcesses).toFixed(2),
+        burstTime: (sums.burstTime / totalProcesses).toFixed(2),
+        completionTime: (sums.completionTime / totalProcesses).toFixed(2),
+        waitingTime: (sums.waitingTime / totalProcesses).toFixed(2),
+        turnaroundTime: (sums.turnaroundTime / totalProcesses).toFixed(2),
+        responseTime: (sums.responseTime / totalProcesses).toFixed(2),
+        executedTime: (sums.executedTime / totalProcesses).toFixed(2),
+      };
+
+      setAverages(averages);
     };
-  };
 
-  const averages = calculateAverages();
+    calculateAverages();
+  }, [processes]);
+
+  const handleStoreResult = () => {
+    setResultData((prevData) => [...prevData, averages]);
+  };
 
   return (
     <div className="report-table-container">
       <h3>Report Table</h3>
+      <button className="store-result-button" onClick={handleStoreResult}>
+        Store Result
+      </button>
       <table className="report-table">
         <thead>
           <tr>
@@ -84,6 +99,36 @@ const ReportTable = ({ processes }) => {
           </tr>
         </tfoot>
       </table>
+      {resultData.length > 0 && (
+        <div className="stored-results">
+          <h4>Stored Results</h4>
+          <table className="report-table">
+            <thead>
+              <tr>
+                <th>Algorithm selected</th>
+                <th>Stored Average Burst Time</th>
+
+                <th>Stored Average Waiting Time</th>
+                <th>Stored Average Turnaround Time</th>
+                <th>Stored Average Response Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {console.log(resultData)}
+              {resultData.map((data, index) => (
+                <tr key={index}>
+                  <td>{data.algoType}</td>
+                  <td>{data.burstTime}</td>
+
+                  <td>{data.waitingTime}</td>
+                  <td>{data.turnaroundTime}</td>
+                  <td>{data.responseTime}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

@@ -13,6 +13,7 @@ const ExecutionQueueControls = ({
   handleNext,
   showReport,
   processes,
+  selectedAlgorithm,
 }) => {
   return (
     <>
@@ -39,7 +40,14 @@ const ExecutionQueueControls = ({
         </button>
         {/* Conditionally render ReportTable */}
       </div>
-      <div>{showReport && <ReportTable processes={processes} />} </div>
+      <div>
+        {showReport && (
+          <ReportTable
+            processes={processes}
+            selectedAlgorithm={selectedAlgorithm}
+          />
+        )}{" "}
+      </div>
     </>
   );
 };
@@ -53,6 +61,7 @@ ExecutionQueueControls.propTypes = {
   handleNext: PropTypes.func.isRequired,
   showReport: PropTypes.bool.isRequired,
   processes: PropTypes.array.isRequired, // Add processes prop type
+  selectedAlgorithm: PropTypes.string.isRequired,
 };
 
 export default ExecutionQueueControls;
