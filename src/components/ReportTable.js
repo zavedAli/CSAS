@@ -106,11 +106,11 @@ const ReportTable = ({ processes, selectedAlgorithm }) => {
             <thead>
               <tr>
                 <th>Algorithm selected</th>
-                <th>Stored Average Burst Time</th>
+                <th>Average Burst Time</th>
 
-                <th>Stored Average Waiting Time</th>
-                <th>Stored Average Turnaround Time</th>
-                <th>Stored Average Response Time</th>
+                <th>Average Waiting Time</th>
+                <th>Average Turnaround Time</th>
+                <th>Average Response Time</th>
               </tr>
             </thead>
             <tbody>
