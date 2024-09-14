@@ -7,6 +7,7 @@ import { getNextProcessPriority } from "../../algorithm/priority";
 import ExecutionQueueControls from "./ExecutionQueueControls";
 import ExecutionQueueInfo from "./ExecutionQueueInfo";
 import "../css/executionQueue.css";
+import { GiProcessor } from "react-icons/gi";
 
 // Import the new function
 import { calculateMetrics } from "../../algorithm/processMetrics"; // <-- New import
@@ -210,13 +211,19 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
 
   return (
     <div className="execution-queue">
-      <h3>Execution Queue</h3>
-      <ExecutionQueueInfo
-        currentTime={currentTime}
-        arrivedProcesses={arrivedProcesses}
-        waitingProcesses={waitingProcesses}
-        executedProcessesInfo={executedProcessesInfo}
-      />
+      <h3 className="flex gap-4 text-center sm:text-start text-[30px] sm:text-[40px] text-[#2d4b8d]  pb-4 items-center">
+        Execution Queue
+        <GiProcessor />
+      </h3>
+      <div className=" mb-10">
+        <ExecutionQueueInfo
+          currentTime={currentTime}
+          arrivedProcesses={arrivedProcesses}
+          waitingProcesses={waitingProcesses}
+          executedProcessesInfo={executedProcessesInfo}
+        />
+      </div>
+
       <div className="gantt-chart">
         {displayedProcesses.map((process) => {
           const { id, name, startTime, burstTime, color } = process;
@@ -238,7 +245,7 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm }) => {
           );
         })}
       </div>
-      <div className="gantt-timeline">
+      <div className="gantt-timeline mb-10">
         {Array.from({ length: totalTime + 1 }, (_, i) => (
           <div key={i} className="gantt-timeline-marker">
             {i}

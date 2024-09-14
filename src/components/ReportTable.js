@@ -55,78 +55,93 @@ const ReportTable = ({ processes, selectedAlgorithm }) => {
 
   return (
     <div className="report-table-container">
-      <h3>Report Table</h3>
-      <button className="store-result-button" onClick={handleStoreResult}>
-        Store Result
-      </button>
-      <table className="report-table">
-        <thead>
-          <tr>
-            <th>Process ID</th>
-            <th>Arrival Time</th>
-            <th>Burst Time</th>
-            <th>Completion Time</th>
-            <th>Waiting Time</th>
-            <th>Turnaround Time</th>
-            <th>Response Time</th>
-            <th>Executed Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {processes.map((process) => (
-            <tr key={process.id}>
-              <td>{process.id}</td>
-              <td>{process.arrivalTime}</td>
-              <td>{process.burstTime}</td>
-              <td>{process.completionTime}</td>
-              <td>{process.waitingTime}</td>
-              <td>{process.turnaroundTime}</td>
-              <td>{process.responseTime}</td>
-              <td>{process.executedTime}</td>
+      <h3 className="flex gap-4 text-center sm:text-start text-[30px] sm:text-[25px] text-[#505050]  pb-4 items-center">
+        Report Table
+      </h3>
+
+      <div className="flex w-[70vw] m-auto">
+        <table className="report-table">
+          <thead>
+            <tr>
+              <th>Process ID</th>
+              <th>Arrival Time</th>
+              <th>Burst Time</th>
+              <th>Completion Time</th>
+              <th>Waiting Time</th>
+              <th>Turnaround Time</th>
+              <th>Response Time</th>
+              <th>Executed Time</th>
             </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Averages</td>
-            <td>{averages.arrivalTime}</td>
-            <td>{averages.burstTime}</td>
-            <td>{averages.completionTime}</td>
-            <td>{averages.waitingTime}</td>
-            <td>{averages.turnaroundTime}</td>
-            <td>{averages.responseTime}</td>
-            <td>{averages.executedTime}</td>
-          </tr>
-        </tfoot>
-      </table>
-      {resultData.length > 0 && (
-        <div className="stored-results">
-          <h4>Stored Results</h4>
-          <table className="report-table">
-            <thead>
-              <tr>
-                <th>Algorithm selected</th>
-                <th>Average Burst Time</th>
-
-                <th>Average Waiting Time</th>
-                <th>Average Turnaround Time</th>
-                <th>Average Response Time</th>
+          </thead>
+          <tbody>
+            {processes.map((process) => (
+              <tr key={process.id}>
+                <td>{process.id}</td>
+                <td>{process.arrivalTime}</td>
+                <td>{process.burstTime}</td>
+                <td>{process.completionTime}</td>
+                <td>{process.waitingTime}</td>
+                <td>{process.turnaroundTime}</td>
+                <td>{process.responseTime}</td>
+                <td>{process.executedTime}</td>
               </tr>
-            </thead>
-            <tbody>
-              {console.log(resultData)}
-              {resultData.map((data, index) => (
-                <tr key={index}>
-                  <td>{data.algoType}</td>
-                  <td>{data.burstTime}</td>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Averages</td>
+              <td>{averages.arrivalTime}</td>
+              <td>{averages.burstTime}</td>
+              <td>{averages.completionTime}</td>
+              <td>{averages.waitingTime}</td>
+              <td>{averages.turnaroundTime}</td>
+              <td>{averages.responseTime}</td>
+              <td>{averages.executedTime}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div className="flex justify-center mt-7">
+        <button
+          className="p-2 text-center text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white m-auto"
+          onClick={handleStoreResult}
+        >
+          Store Result
+        </button>
+      </div>
 
-                  <td>{data.waitingTime}</td>
-                  <td>{data.turnaroundTime}</td>
-                  <td>{data.responseTime}</td>
+      {resultData.length > 0 && (
+        <div className="stored-results mb-11">
+          <h4 className="flex gap-4 text-center sm:text-start text-[30px] sm:text-[25px] text-[#505050]  pb-4 items-center">
+            Stored Results
+          </h4>
+          <div className="flex w-[70vw] m-auto">
+            <table className="report-table">
+              <thead>
+                <tr>
+                  <th>Algorithm selected</th>
+                  <th>Average Burst Time</th>
+
+                  <th>Average Waiting Time</th>
+                  <th>Average Turnaround Time</th>
+                  <th>Average Response Time</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {console.log(resultData)}
+                {resultData.map((data, index) => (
+                  <tr key={index}>
+                    <td>{data.algoType}</td>
+                    <td>{data.burstTime}</td>
+
+                    <td>{data.waitingTime}</td>
+                    <td>{data.turnaroundTime}</td>
+                    <td>{data.responseTime}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

@@ -5,7 +5,7 @@ import "./css/dropDown.css"; // Import the CSS file
 
 const Dropdown = ({ selectedOption, onSelectChange }) => {
   return (
-    <div className="dropdown-container">
+    <div className="dropdown-container w-full">
       <h2>Select Algorithm</h2>
       <select
         value={selectedOption}

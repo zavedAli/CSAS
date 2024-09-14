@@ -1,13 +1,4 @@
 /* src/App.css */
-.App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  font-family: sans-serif;
-  text-align: center;
-  padding: 20px;
-}
 
 .centered-container {
   display: flex;

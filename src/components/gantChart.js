@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./css/GanttChart.css";
-
+import { MdOutlineTimeline } from "react-icons/md";
 const GanttChart = ({ processes }) => {
   let currentTime = 0;
   const scheduledProcesses = processes.map((process) => {
@@ -49,7 +49,13 @@ const GanttChart = ({ processes }) => {
   return (
     <div>
       <div>
-        <h3>Timeline Chart</h3>
+        <h3 className=" flex gap-4 text-center sm:text-start text-[30px] sm:text-[40px] text-[#414040]  pb-4 ps-10 items-center">
+          <span>Timeline Chart</span>
+          <span>
+            <MdOutlineTimeline />
+          </span>
+        </h3>
+        <div className="h-[1px] bg-[#cccccc] w-[75vw] m-auto mb-8"></div>
         <div className="gantt-chart">
           {scheduledProcesses.map((process) => {
             const { id, name, startTime, burstTime, color } = process;
@@ -99,10 +105,24 @@ const GanttChart = ({ processes }) => {
           ))}
         </div>
         <div className="gantt-legend">
-          <h3>Process Legend</h3>
-          <ul>
+          <div className="flex gap-1 items-center w-[60vw] m-auto">
+            <div className="h-[1px] w-[45vw] bg-[#bebebe]"></div>
+            <div className="flex text-center">
+              <h3 className="w-[10vw] text-[15px] text-[#414040] ">
+                Process Legend
+              </h3>
+            </div>
+
+            <div className="h-[1px] w-[45vw] bg-[#bebebe]"></div>
+          </div>
+
+          <ul className="flex gap-4 font-sans text-[15px] ps-10 justify-center ">
             {scheduledProcesses.map((process) => (
-              <li key={process.id} style={{ color: process.color }}>
+              <li
+                className="bg-[#8080804f] rounded-full py-2 px-5"
+                key={process.id}
+                style={{ color: process.color }}
+              >
                 {process.name} (ID: {process.id})
               </li>
             ))}

@@ -57,11 +57,16 @@ const ProcessInputForm = ({
   };
 
   return (
-    <div className="process-input-form">
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
+    <div className=" shadow-md process-input-form text-[#242424] w-full bg-[#b3b3b3] rounded-[30px] justify-center">
+      <form
+        className="flex flex-col gap-4 justify-start p-1 sm:p-6 border-[1px] border-inherit mx-2 font-bold sm:mx-10 mt-10 mb-6 rounded"
+        onSubmit={handleSubmit}
+      >
+        <label className="flex justify-start gap-6">
+          <span className="flex justify-start w-1/3">Process Name:</span>
+
           <input
+            className="w-full border-[1px] border-inherit rounded"
             type="text"
             name="name"
             value={process.name}
@@ -69,9 +74,10 @@ const ProcessInputForm = ({
             required
           />
         </label>
-        <label>
-          Arrival Time:
+        <label className="flex justify-start gap-6">
+          <span className="flex justify-start w-1/3">Arrival Time:</span>
           <input
+            className="w-full border-[1px] border-inherit rounded"
             type="number"
             name="arrivalTime"
             value={process.arrivalTime}
@@ -79,9 +85,11 @@ const ProcessInputForm = ({
             required
           />
         </label>
-        <label>
-          Burst Time:
+        <label className="flex justify-start gap-6">
+          <span className="flex justify-start w-1/4">Burst Time:</span>
+
           <input
+            className="w-full border-[1px] border-inherit rounded"
             type="number"
             name="burstTime"
             value={process.burstTime}
@@ -90,9 +98,10 @@ const ProcessInputForm = ({
           />
         </label>
         {selectedAlgorithm === "Priority" && (
-          <label>
-            Priority:
+          <label className="flex justify-start gap-6">
+            <span className="flex justify-start w-1/4">Priority Value:</span>
             <input
+              className="w-full border-[1px] border-inherit rounded"
               type="number"
               name="priority"
               value={process.priority}
@@ -101,15 +110,31 @@ const ProcessInputForm = ({
             />
           </label>
         )}
-        <button type="submit" disabled={isStarted}>
+        <button
+          className="p-2 font-normal text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/4 rounded-lg text-white m-auto"
+          type="submit"
+          disabled={isStarted}
+        >
           Add Process
         </button>
       </form>
-      {!isStarted ? (
-        <button onClick={onStart}>Start</button>
-      ) : (
-        <button onClick={onReset}>Reset</button>
-      )}
+      <div className="flex justify-center w-full mb-7">
+        {!isStarted ? (
+          <button
+            onClick={onStart}
+            className="p-2 text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white text-center m-auto"
+          >
+            Start
+          </button>
+        ) : (
+          <button
+            className="p-2 text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white m-auto mb-5"
+            onClick={onReset}
+          >
+            Reset
+          </button>
+        )}
+      </div>
     </div>
   );
 };
