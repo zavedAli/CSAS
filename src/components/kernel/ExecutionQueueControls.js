@@ -16,6 +16,7 @@ const ExecutionQueueControls = ({
   showReport,
   processes,
   selectedAlgorithm,
+  onStoreResult,
 }) => {
   return (
     <>
@@ -43,15 +44,15 @@ const ExecutionQueueControls = ({
         >
           Next <GrFormNextLink />
         </button>
-        {/* Conditionally render ReportTable */}
       </div>
       <div>
         {showReport && (
           <ReportTable
             processes={processes}
             selectedAlgorithm={selectedAlgorithm}
+            onAutoStore={onStoreResult}
           />
-        )}{" "}
+        )}
       </div>
     </>
   );
@@ -65,8 +66,9 @@ ExecutionQueueControls.propTypes = {
   handleGenerateReport: PropTypes.func.isRequired,
   handleNext: PropTypes.func.isRequired,
   showReport: PropTypes.bool.isRequired,
-  processes: PropTypes.array.isRequired, // Add processes prop type
+  processes: PropTypes.array.isRequired,
   selectedAlgorithm: PropTypes.string.isRequired,
+  onStoreResult: PropTypes.func,
 };
 
 export default ExecutionQueueControls;

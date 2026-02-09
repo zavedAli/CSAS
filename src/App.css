@@ -11,3 +11,22 @@ h1,
 h2 {
   margin-bottom: 20px;
 }
+
+/* Custom Scrollbar Styling */
+.xl\:overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.xl\:overflow-y-auto::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+.xl\:overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.xl\:overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}

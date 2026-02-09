@@ -9,9 +9,12 @@ const ExecutionQueueInfo = ({
   waitingProcesses,
   executedProcessesInfo,
 }) => {
+  const totalBurstTime = executedProcessesInfo.reduce((sum, p) => sum + p.burstTime, 0);
+  const cpuUtilization = currentTime > 0 ? ((totalBurstTime / currentTime) * 100).toFixed(2) : 0;
+
   return (
     <div className="current-info">
-      <div className="current-time">
+      <div className="current-time ">
         <strong>Current Time :</strong> {currentTime}
       </div>
       <div className="arrived-processes">
@@ -22,7 +25,7 @@ const ExecutionQueueInfo = ({
           </span>
         ))}
       </div>
-      <div className="waiting-processes">
+      <div className="waiting-processes text-gray-300">
         <strong>Processes Waiting : </strong>
         {waitingProcesses.map((process) => (
           <span key={process.id} className="waiting-process">
@@ -30,7 +33,7 @@ const ExecutionQueueInfo = ({
           </span>
         ))}
       </div>
-      <div className="executed-processes">
+      <div className="executed-processes text-gray-300">
         <strong>Processes Executed : </strong>
         {executedProcessesInfo.map((process) => (
           <span key={process.id} className="executed-process">
@@ -38,7 +41,11 @@ const ExecutionQueueInfo = ({
           </span>
         ))}
       </div>
-    </div>
+      <div className="current-time">
+        <strong>CPU Utilization :</strong> {cpuUtilization}%
+      </div>
+      </div>
+
   );
 };
 

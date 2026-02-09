@@ -9,34 +9,24 @@ const ProcessInputForm = ({
   onStart,
   onReset,
   isStarted,
-<<<<<<< HEAD
   selectedAlgorithm,
   timeQuantum,
   onTimeQuantumChange,
-=======
-  selectedAlgorithm, // Add this prop to determine if Priority Algorithm is selected
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  onLoadSample,
+  processes,
 }) => {
   const [process, setProcess] = useState({
     id: nextProcessId,
     name: "",
     arrivalTime: "",
     burstTime: "",
-<<<<<<< HEAD
     priority: "",
-=======
-    priority: "", // Add priority to the process state
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
   });
 
   useEffect(() => {
     setProcess((prevProcess) => ({
       ...prevProcess,
-<<<<<<< HEAD
       priority: "",
-=======
-      priority: "", // Reset priority when selectedAlgorithm changes
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
     }));
   }, [selectedAlgorithm]);
 
@@ -71,17 +61,16 @@ const ProcessInputForm = ({
   };
 
   return (
-<<<<<<< HEAD
-    <div className="shadow-xl process-input-form text-slate-800 w-full bg-white rounded-2xl">
+    <div className="shadow-xl process-input-form text-slate-200 w-full bg-slate-800 border border-slate-700 rounded-lg">
       <form
-        className="flex flex-col gap-3 justify-start p-4 sm:p-5 mx-3 sm:mx-5 mt-4 mb-3 rounded-lg bg-gradient-to-br from-slate-50 to-blue-50 border border-slate-200"
+        className="flex flex-col gap-2 justify-start p-3 mx-3 mt-3 mb-2 rounded-lg bg-slate-900 border border-slate-700"
         onSubmit={handleSubmit}
       >
         {selectedAlgorithm === "RR" && (
-          <label className="flex items-center gap-2 text-sm">
-            <span className="font-semibold text-slate-700 w-28">Time Quantum:</span>
+          <label className="flex items-center gap-2 text-xs">
+            <span className="font-semibold text-slate-300 w-28">Time Quantum:</span>
             <input
-              className="flex-1 px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700"
+              className="flex-1 px-2 py-1.5 border border-slate-600 rounded-md text-xs font-medium text-slate-200 bg-slate-800"
               type="number"
               min="1"
               value={timeQuantum}
@@ -90,22 +79,10 @@ const ProcessInputForm = ({
             />
           </label>
         )}
-        <label className="flex items-center gap-2 text-sm">
-          <span className="font-semibold text-slate-700 w-28">Process Name:</span>
+        <label className="flex items-center gap-2 text-xs">
+          <span className="font-semibold text-slate-300 w-28">Process Name:</span>
           <input
-            className="flex-1 px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700"
-=======
-    <div className=" shadow-md process-input-form text-[#242424] w-full bg-[#b3b3b3] rounded-[30px] justify-center">
-      <form
-        className="flex flex-col gap-4 justify-start p-1 sm:p-6 border-[1px] border-inherit mx-2 font-bold sm:mx-10 mt-10 mb-6 rounded"
-        onSubmit={handleSubmit}
-      >
-        <label className="flex justify-start gap-6">
-          <span className="flex justify-start w-1/3">Process Name:</span>
-
-          <input
-            className="w-full border-[1px] border-inherit rounded"
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+            className="flex-1 px-2 py-1.5 border border-slate-600 rounded-md text-xs font-medium text-slate-200 bg-slate-800"
             type="text"
             name="name"
             value={process.name}
@@ -113,17 +90,10 @@ const ProcessInputForm = ({
             required
           />
         </label>
-<<<<<<< HEAD
-        <label className="flex items-center gap-2 text-sm">
-          <span className="font-semibold text-slate-700 w-28">Arrival Time:</span>
+        <label className="flex items-center gap-2 text-xs">
+          <span className="font-semibold text-slate-300 w-28">Arrival Time:</span>
           <input
-            className="flex-1 px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700"
-=======
-        <label className="flex justify-start gap-6">
-          <span className="flex justify-start w-1/3">Arrival Time:</span>
-          <input
-            className="w-full border-[1px] border-inherit rounded"
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+            className="flex-1 px-2 py-1.5 border border-slate-600 rounded-md text-xs font-medium text-slate-200 bg-slate-800"
             type="number"
             name="arrivalTime"
             value={process.arrivalTime}
@@ -131,18 +101,10 @@ const ProcessInputForm = ({
             required
           />
         </label>
-<<<<<<< HEAD
-        <label className="flex items-center gap-2 text-sm">
-          <span className="font-semibold text-slate-700 w-28">Burst Time:</span>
+        <label className="flex items-center gap-2 text-xs">
+          <span className="font-semibold text-slate-300 w-28">Burst Time:</span>
           <input
-            className="flex-1 px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700"
-=======
-        <label className="flex justify-start gap-6">
-          <span className="flex justify-start w-1/4">Burst Time:</span>
-
-          <input
-            className="w-full border-[1px] border-inherit rounded"
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+            className="flex-1 px-2 py-1.5 border border-slate-600 rounded-md text-xs font-medium text-slate-200 bg-slate-800"
             type="number"
             name="burstTime"
             value={process.burstTime}
@@ -151,17 +113,10 @@ const ProcessInputForm = ({
           />
         </label>
         {selectedAlgorithm === "Priority" && (
-<<<<<<< HEAD
-          <label className="flex items-center gap-2 text-sm">
-            <span className="font-semibold text-slate-700 w-28">Priority Value:</span>
+          <label className="flex items-center gap-2 text-xs">
+            <span className="font-semibold text-slate-300 w-28">Priority Value:</span>
             <input
-              className="flex-1 px-3 py-1.5 border-2 border-slate-200 rounded-lg text-sm font-medium text-slate-700"
-=======
-          <label className="flex justify-start gap-6">
-            <span className="flex justify-start w-1/4">Priority Value:</span>
-            <input
-              className="w-full border-[1px] border-inherit rounded"
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+              className="flex-1 px-2 py-1.5 border border-slate-600 rounded-md text-xs font-medium text-slate-200 bg-slate-800"
               type="number"
               name="priority"
               value={process.priority}
@@ -171,42 +126,33 @@ const ProcessInputForm = ({
           </label>
         )}
         <button
-<<<<<<< HEAD
-          className="mt-1 px-4 py-2 text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg text-white mx-auto shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-=======
-          className="p-2 font-normal text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/4 rounded-lg text-white m-auto"
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+          className="mt-1 px-3 py-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-700 rounded-md text-white mx-auto shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={isStarted}
         >
           Add Process
         </button>
       </form>
-<<<<<<< HEAD
-      <div className="flex justify-center w-full mb-4">
+      <div className="flex justify-center gap-2 w-full mb-3 px-3">
+        <button
+          onClick={onLoadSample}
+          disabled={isStarted}
+          className="px-3 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 rounded-md text-white shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Load Sample
+        </button>
         {!isStarted ? (
           <button
             onClick={onStart}
-            className="px-6 py-2 text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
-          >
-            Start Simulation
-          </button>
-        ) : (
-          <button
-            className="px-6 py-2 text-sm font-semibold bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
-=======
-      <div className="flex justify-center w-full mb-7">
-        {!isStarted ? (
-          <button
-            onClick={onStart}
-            className="p-2 text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white text-center m-auto"
+            className="px-4 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-700 rounded-md text-white shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!selectedAlgorithm || processes.length === 0}
+            title={!selectedAlgorithm ? "Select an algorithm first" : processes.length === 0 ? "Add processes first" : "Start simulation"}
           >
             Start
           </button>
         ) : (
           <button
-            className="p-2 text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white m-auto mb-5"
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+            className="px-4 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 rounded-md text-white shadow-md transition-all duration-200"
             onClick={onReset}
           >
             Reset
@@ -223,13 +169,11 @@ ProcessInputForm.propTypes = {
   onStart: PropTypes.func.isRequired,
   onReset: PropTypes.func.isRequired,
   isStarted: PropTypes.bool.isRequired,
-<<<<<<< HEAD
   selectedAlgorithm: PropTypes.string.isRequired,
   timeQuantum: PropTypes.number,
   onTimeQuantumChange: PropTypes.func,
-=======
-  selectedAlgorithm: PropTypes.string.isRequired, // Add this prop type
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  onLoadSample: PropTypes.func.isRequired,
+  processes: PropTypes.array,
 };
 
 export default ProcessInputForm;

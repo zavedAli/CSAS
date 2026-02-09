@@ -1,10 +1,15 @@
 /* src/components/css/executionQueue.css */
 .execution-queue {
-<<<<<<< HEAD
   margin-top: 0;
-  padding: 12px 16px;
-  background-color: #f8fafc;
-  border-radius: 16px;
+  padding: 12px;
+  background-color: #161b22;
+  border-radius: 8px;
+  border: 1px solid #30363d;
+}
+
+.execution-queue h3 {
+  color: #c9d1d9 !important;
+  font-size: 1.2em;
 }
 
 .current-info {
@@ -12,97 +17,49 @@
 }
 
 .current-time {
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 8px;
+  color: #8b949e;
 }
 
 .arrived-processes {
-  font-size: 14px;
+  font-size: 12px;
   display: inline-block;
   margin-right: 8px;
-  padding: 6px 10px;
-  background-color: #e0e7ff;
+  padding: 4px 8px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
   border-radius: 6px;
   margin-bottom: 8px;
-=======
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #f5f5f5b7;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
-}
-
-.current-info {
-  margin-bottom: 10px;
-}
-.current-time {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.arrived-processes {
-  font-size: 16px;
-}
-
-.arrived-processes {
-  display: inline-block;
-  margin-right: 10px;
-  padding: 8px;
-  background-color: #e0e0e0;
-  border-radius: 4px;
-  margin-bottom: 10px;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  color: #c9d1d9;
 }
 
 .execution-queue-chart {
   position: relative;
-<<<<<<< HEAD
   height: 80px;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
+  background-color: #0d1117;
+  border: 1px solid #30363d;
   display: flex;
   align-items: center;
-  border-radius: 8px;
-=======
-  height: 100px;
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  display: flex;
-  align-items: center;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  border-radius: 6px;
 }
 
 .execution-queue-bar {
   position: absolute;
-<<<<<<< HEAD
   height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 6px;
-=======
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  border-radius: 4px;
   overflow: hidden;
   color: #fff;
 }
 
 .execution-queue-bar-text {
-<<<<<<< HEAD
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   z-index: 1;
   padding: 0 4px;
-=======
-  font-size: 14px;
-  text-align: center;
-  z-index: 1;
-  padding: 0 5px;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-queue-bar-time {
@@ -110,89 +67,70 @@
   justify-content: space-between;
   width: 100%;
   position: absolute;
-<<<<<<< HEAD
   top: 40px;
-  font-size: 11px;
-=======
-  top: 50px;
-  font-size: 12px;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
-  color: #000;
+  font-size: 10px;
+  color: #c9d1d9;
+  font-weight: 600;
 }
 
 .execution-queue-timeline {
   display: flex;
   justify-content: space-between;
-<<<<<<< HEAD
   margin-top: 8px;
 }
 
 .execution-queue-timeline-marker {
   width: 18px;
   text-align: center;
-  font-size: 11px;
-=======
-  margin-top: 10px;
-}
-
-.execution-queue-timeline-marker {
-  width: 20px;
-  text-align: center;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  font-size: 10px;
+  color: #c9d1d9;
+  font-weight: 600;
 }
 
 .execution-idle {
   position: absolute;
-<<<<<<< HEAD
   height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 6px;
+  border-radius: 4px;
   overflow: hidden;
-  color: #000;
+  color: #8b949e;
   font-size: 11px;
-=======
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  overflow: hidden;
-  color: #000;
-  font-size: 12px;
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-buttons {
   display: flex;
   justify-content: center;
-<<<<<<< HEAD
-  gap: 12px;
+  gap: 8px;
   margin-top: 12px;
   flex-wrap: wrap;
-=======
-  margin-top: 20px;
 }
 
 .execution-buttons button {
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
+  background-color: #238636;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.execution-buttons button:hover:not(:disabled) {
+  background-color: #2ea043;
 }
 
 .execution-buttons button:disabled {
   cursor: not-allowed;
-<<<<<<< HEAD
-  background-color: #cbd5e1;
+  background-color: #21262d;
+  color: #6e7681;
   opacity: 0.6;
 }
 
-=======
-  background-color: #ccc;
-}
-/* src/components/css/executionQueue.css */
->>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 .gantt-bar.idle {
-  background-color: #e0e0e0;
-  color: #888;
-  border: 1px dashed #888;
+  background-color: #21262d;
+  color: #6e7681;
+  border: 1px dashed #30363d;
 }

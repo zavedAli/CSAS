@@ -1,0 +1,65 @@
+.metrics-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.metric-box {
+  flex: 1;
+  min-width: 200px;
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.metric-box.starvation {
+  border-color: #f85149;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #8b949e;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #58a6ff;
+  margin-bottom: 4px;
+}
+
+.metric-unit {
+  font-size: 11px;
+  color: #6e7681;
+}
+
+.starvation-warning .metric-value {
+  color: #f85149;
+}
+
+.no-starvation .metric-value {
+  color: #3fb950;
+  font-size: 40px;
+}
+
+.starved-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.starved-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: white;
+  font-weight: 600;
+}

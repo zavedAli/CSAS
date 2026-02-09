@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./css/reportTable.css";
+import { exportToCSV, exportToPDF } from "../utils/exportUtils";
 
-const ReportTable = ({ processes, selectedAlgorithm }) => {
+const ReportTable = ({ processes, selectedAlgorithm, onAutoStore }) => {
   const [averages, setAverages] = useState({});
-  const [resultData, setResultData] = useState([]);
-  console.log(selectedAlgorithm);
 
   useEffect(() => {
     const calculateAverages = () => {
@@ -47,10 +46,49 @@ const ReportTable = ({ processes, selectedAlgorithm }) => {
     };
 
     calculateAverages();
-  }, [processes]);
+  }, [processes, selectedAlgorithm]);
+
+  useEffect(() => {
+    const handleAutoStore = () => {
+      if (averages.algoType && onAutoStore) {
+        onAutoStore(averages);
+      }
+    };
+
+    window.addEventListener('autoStoreResults', handleAutoStore);
+    return () => window.removeEventListener('autoStoreResults', handleAutoStore);
+  }, [averages, onAutoStore]);
 
   const handleStoreResult = () => {
-    setResultData((prevData) => [...prevData, averages]);
+    if (onAutoStore) {
+      onAutoStore(averages);
+    }
+  };
+
+  const handleExportCSV = () => {
+    const exportData = processes.map(p => ({
+      'Process ID': p.id,
+      'Arrival Time': p.arrivalTime,
+      'Burst Time': p.burstTime,
+      'Completion Time': p.completionTime,
+      'Waiting Time': p.waitingTime,
+      'Turnaround Time': p.turnaroundTime,
+      'Response Time': p.responseTime,
+    }));
+    exportToCSV(exportData, `${selectedAlgorithm}_report.csv`);
+  };
+
+  const handleExportPDF = () => {
+    const exportData = processes.map(p => ({
+      'Process ID': p.id,
+      'Arrival Time': p.arrivalTime,
+      'Burst Time': p.burstTime,
+      'Completion Time': p.completionTime,
+      'Waiting Time': p.waitingTime,
+      'Turnaround Time': p.turnaroundTime,
+      'Response Time': p.responseTime,
+    }));
+    exportToPDF(exportData, `${selectedAlgorithm} Algorithm Report`, `${selectedAlgorithm}_report.pdf`);
   };
 
   return (
@@ -101,49 +139,26 @@ const ReportTable = ({ processes, selectedAlgorithm }) => {
           </tfoot>
         </table>
       </div>
-      <div className="flex justify-center mt-7">
+      <div className="flex justify-center gap-3 mt-7">
         <button
-          className="p-2 text-center text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white m-auto"
+          className="p-2 text-center text-xs bg-green-600 hover:bg-green-700 rounded-lg text-white"
+          onClick={handleExportCSV}
+        >
+          Export CSV
+        </button>
+        <button
+          className="p-2 text-center text-xs bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+          onClick={handleExportPDF}
+        >
+          Export PDF
+        </button>
+        <button
+          className="p-2 text-center text-xs bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white"
           onClick={handleStoreResult}
         >
           Store Result
         </button>
       </div>
-
-      {resultData.length > 0 && (
-        <div className="stored-results mb-11">
-          <h4 className="flex gap-4 text-center sm:text-start text-[30px] sm:text-[25px] text-[#505050]  pb-4 items-center">
-            Stored Results
-          </h4>
-          <div className="flex w-[70vw] m-auto">
-            <table className="report-table">
-              <thead>
-                <tr>
-                  <th>Algorithm selected</th>
-                  <th>Average Burst Time</th>
-
-                  <th>Average Waiting Time</th>
-                  <th>Average Turnaround Time</th>
-                  <th>Average Response Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {console.log(resultData)}
-                {resultData.map((data, index) => (
-                  <tr key={index}>
-                    <td>{data.algoType}</td>
-                    <td>{data.burstTime}</td>
-
-                    <td>{data.waitingTime}</td>
-                    <td>{data.turnaroundTime}</td>
-                    <td>{data.responseTime}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -161,6 +176,8 @@ ReportTable.propTypes = {
       executedTime: PropTypes.number,
     })
   ).isRequired,
+  selectedAlgorithm: PropTypes.string.isRequired,
+  onAutoStore: PropTypes.func,
 };
 
 export default ReportTable;

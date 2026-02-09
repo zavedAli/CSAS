@@ -25,6 +25,9 @@ const GanttChart = ({ processes }) => {
 
   const timeIntervals = Array.from({ length: totalTime + 1 }, (_, i) => i);
 
+  const totalBurstTime = scheduledProcesses.reduce((sum, p) => sum + p.burstTime, 0);
+  const cpuUtilization = totalTime > 0 ? ((totalBurstTime / totalTime) * 100).toFixed(2) : 0;
+
   // Generate segments for "idle" time
   const idleSegments = [];
   let lastEndTime = 0;
@@ -49,12 +52,18 @@ const GanttChart = ({ processes }) => {
   return (
     <div>
       <div>
-        <h3 className=" flex gap-4 text-center sm:text-start text-[30px] sm:text-[40px] text-[#414040]  pb-4 ps-10 items-center">
-          <span>Timeline Chart</span>
-          <span>
-            <MdOutlineTimeline />
-          </span>
-        </h3>
+        <div className="flex justify-between items-center pb-4 ps-10 pe-10">
+          <h3 className="flex gap-4 text-center sm:text-start text-[30px] sm:text-[40px] text-[#414040] items-center">
+            <span>Timeline Chart</span>
+            <span>
+              <MdOutlineTimeline />
+            </span>
+          </h3>
+          <div className="text-right">
+            <div className="text-sm text-gray-500">CPU Utilization</div>
+            <div className="text-2xl font-bold text-[#414040]">{cpuUtilization}%</div>
+          </div>
+        </div>
         <div className="h-[1px] bg-[#cccccc] w-[75vw] m-auto mb-8"></div>
         <div className="gantt-chart">
           {scheduledProcesses.map((process) => {
@@ -96,7 +105,7 @@ const GanttChart = ({ processes }) => {
             );
           })}
         </div>
-        <div className="gantt-timeline">
+        <div className="gantt-timeline text-gray-300">
           {timeIntervals.map((time) => (
             <div key={time} className="gantt-timeline-marker">
               {time}

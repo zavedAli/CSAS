@@ -1,0 +1,132 @@
+.step-explanation-container {
+  background-color: #161b22;
+  border-radius: 8px;
+  border: 1px solid #30363d;
+  padding: 16px;
+  margin-bottom: 16px;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.horizontal-step-viewer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 150px;
+}
+
+.nav-arrow {
+  background-color: #238636;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-arrow:hover:not(:disabled) {
+  background-color: #2ea043;
+  transform: scale(1.1);
+}
+
+.nav-arrow:disabled {
+  background-color: #21262d;
+  color: #6e7681;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.step-content-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.step-counter {
+  text-align: center;
+  color: #8b949e;
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.no-steps {
+  text-align: center;
+  color: #6e7681;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+.step-item {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 16px;
+  min-height: 120px;
+}
+
+.step-item.execution {
+  border-left: 3px solid #58a6ff;
+}
+
+.step-item.idle {
+  border-left: 3px solid #6e7681;
+  background-color: #161b22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.step-number {
+  font-weight: 600;
+  color: #58a6ff;
+  font-size: 14px;
+}
+
+.step-process {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
+}
+
+.step-description {
+  color: #c9d1d9;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.step-completion {
+  color: #8b949e;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.idle-description {
+  color: #8b949e;
+  font-size: 14px;
+  text-align: center;
+}
