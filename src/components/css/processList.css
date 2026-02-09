@@ -1,0 +1,43 @@
+/* src/components/ProcessList.css */
+.process-list {
+  margin-bottom: 0;
+  background: white;
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.process-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 0.85em;
+}
+
+h2 {
+  text-align: left;
+}
+
+.process-list th,
+.process-list td {
+  border: 1px solid #e2e8f0;
+  padding: 6px 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.process-list th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.9em;
+}
+
+.process-list tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.process-list tr:hover {
+  background-color: #e0e7ff;
+  transition: background-color 0.2s;
+}

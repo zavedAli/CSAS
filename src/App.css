@@ -1,0 +1,13 @@
+/* src/App.css */
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+h1,
+h2 {
+  margin-bottom: 20px;
+}

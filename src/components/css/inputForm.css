@@ -1,0 +1,16 @@
+div form input {
+  background-color: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+div form input:focus {
+  outline: none;
+  background-color: white;
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+div form input:hover {
+  background-color: white;
+  border-color: #cbd5e1;
+}

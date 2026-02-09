@@ -1,0 +1,69 @@
+{
+  "algorithms": [
+    {
+      "name": "FCFS",
+      "description": "First-Come, First-Served (FCFS) is the simplest scheduling algorithm that schedules processes in the order they arrive in the ready queue. It is non-preemptive and ensures that processes are handled in a straightforward, sequential manner.",
+      "example": {
+        "subDes": "NOTE: if there is no any process in execution queue and current time is 0 then process which arrived first will be added in execution queue and then it will follow the actual way of scheduling",
+        "processes": [
+          { "id": 1, "arrivalTime": 0, "burstTime": 5 },
+          { "id": 2, "arrivalTime": 1, "burstTime": 3 },
+          { "id": 3, "arrivalTime": 2, "burstTime": 8 }
+        ],
+        "executionOrder": [1, 2, 3]
+      }
+    },
+    {
+      "name": "SJF",
+      "description": "Shortest Job First (SJF) schedules processes based on the shortest burst time first. It can be preemptive or non-preemptive. In the non-preemptive version, once a process starts, it cannot be interrupted until it finishes.",
+      "example": {
+        "subDes": "NOTE: if there is no any process in execution queue and current time is 0 then process which arrived first will be added in execution queue and then it will follow the actual way of scheduling",
+        "processes": [
+          { "id": 1, "arrivalTime": 0, "burstTime": 8 },
+          { "id": 2, "arrivalTime": 1, "burstTime": 4 },
+          { "id": 3, "arrivalTime": 2, "burstTime": 1 }
+        ],
+        "executionOrder": [1, 3, 2]
+      }
+    },
+    {
+      "name": "SRTF",
+      "description": "Shortest Remaining Time First (SRTF) is the preemptive version of SJF. It schedules processes based on the shortest remaining burst time. When a new process arrives with a shorter remaining time than the currently executing process, it preempts the current process.",
+      "example": {
+        "subDes": "NOTE: SRTF is preemptive and can switch between processes when a shorter job arrives",
+        "processes": [
+          { "id": 1, "arrivalTime": 0, "burstTime": 8 },
+          { "id": 2, "arrivalTime": 1, "burstTime": 4 },
+          { "id": 3, "arrivalTime": 2, "burstTime": 2 }
+        ],
+        "executionOrder": "Dynamic based on remaining time"
+      }
+    },
+    {
+      "name": "Priority",
+      "description": "Priority Scheduling assigns priorities to processes and schedules them based on these priorities. Higher priority processes are executed before lower priority ones. It can be preemptive or non-preemptive.",
+      "example": {
+        "subDes": "NOTE: if there is no any process in execution queue and current time is 0 then process which arrived first will be added in execution queue and then it will follow the actual way of scheduling",
+        "processes": [
+          { "id": 1, "arrivalTime": 0, "burstTime": 5, "priority": 2 },
+          { "id": 2, "arrivalTime": 1, "burstTime": 3, "priority": 1 },
+          { "id": 3, "arrivalTime": 2, "burstTime": 8, "priority": 3 }
+        ],
+        "executionOrder": [1, 3, 2]
+      }
+    },
+    {
+      "name": "RR",
+      "description": "Round Robin (RR) is a preemptive scheduling algorithm where each process is assigned a fixed time quantum. Processes are executed in a circular queue fashion. When a process's time quantum expires, it is moved to the end of the queue, and the next process gets CPU time.",
+      "example": {
+        "subDes": "NOTE: Time quantum determines how long each process runs before being preempted. Default is 2 time units.",
+        "processes": [
+          { "id": 1, "arrivalTime": 0, "burstTime": 5 },
+          { "id": 2, "arrivalTime": 1, "burstTime": 3 },
+          { "id": 3, "arrivalTime": 2, "burstTime": 1 }
+        ],
+        "executionOrder": "Circular with time quantum"
+      }
+    }
+  ]
+}
