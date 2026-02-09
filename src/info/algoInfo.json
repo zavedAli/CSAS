@@ -27,6 +27,7 @@
       }
     },
     {
+<<<<<<< HEAD
       "name": "SRTF",
       "description": "Shortest Remaining Time First (SRTF) is the preemptive version of SJF. It schedules processes based on the shortest remaining burst time. When a new process arrives with a shorter remaining time than the currently executing process, it preempts the current process.",
       "example": {
@@ -40,6 +41,8 @@
       }
     },
     {
+=======
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
       "name": "Priority",
       "description": "Priority Scheduling assigns priorities to processes and schedules them based on these priorities. Higher priority processes are executed before lower priority ones. It can be preemptive or non-preemptive.",
       "example": {
@@ -51,6 +54,7 @@
         ],
         "executionOrder": [1, 3, 2]
       }
+<<<<<<< HEAD
     },
     {
       "name": "RR",
@@ -64,6 +68,8 @@
         ],
         "executionOrder": "Circular with time quantum"
       }
+=======
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
     }
   ]
 }

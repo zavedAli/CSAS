@@ -1,5 +1,6 @@
 /* src/components/ProcessList.css */
 .process-list {
+<<<<<<< HEAD
   margin-bottom: 0;
   background: white;
   border-radius: 16px;
@@ -22,11 +23,29 @@ h2 {
 .process-list td {
   border: 1px solid #e2e8f0;
   padding: 6px 8px;
+=======
+  margin-bottom: 50px;
+}
+
+.process-list table {
+  width: 90%;
+  border-collapse: collapse;
+  margin: auto;
+}
+h2 {
+  text-align: center;
+}
+.process-list th,
+.process-list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
   text-align: center;
   vertical-align: middle;
 }
 
 .process-list th {
+<<<<<<< HEAD
   background-color: #f1f5f9;
   font-weight: 600;
   color: #475569;
@@ -40,4 +59,15 @@ h2 {
 .process-list tr:hover {
   background-color: #e0e7ff;
   transition: background-color 0.2s;
+=======
+  background-color: #f2f2f2;
+}
+
+.process-list tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.process-list tr:hover {
+  background-color: #ddd;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }

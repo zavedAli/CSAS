@@ -1,5 +1,6 @@
 /* src/components/css/executionQueue.css */
 .execution-queue {
+<<<<<<< HEAD
   margin-top: 0;
   padding: 12px 16px;
   background-color: #f8fafc;
@@ -23,34 +24,85 @@
   background-color: #e0e7ff;
   border-radius: 6px;
   margin-bottom: 8px;
+=======
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f5f5f5b7;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+
+.current-info {
+  margin-bottom: 10px;
+}
+.current-time {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.arrived-processes {
+  font-size: 16px;
+}
+
+.arrived-processes {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-queue-chart {
   position: relative;
+<<<<<<< HEAD
   height: 80px;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   border-radius: 8px;
+=======
+  height: 100px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-queue-bar {
   position: absolute;
+<<<<<<< HEAD
   height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
+=======
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
   overflow: hidden;
   color: #fff;
 }
 
 .execution-queue-bar-text {
+<<<<<<< HEAD
   font-size: 12px;
   text-align: center;
   z-index: 1;
   padding: 0 4px;
+=======
+  font-size: 14px;
+  text-align: center;
+  z-index: 1;
+  padding: 0 5px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-queue-bar-time {
@@ -58,14 +110,20 @@
   justify-content: space-between;
   width: 100%;
   position: absolute;
+<<<<<<< HEAD
   top: 40px;
   font-size: 11px;
+=======
+  top: 50px;
+  font-size: 12px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
   color: #000;
 }
 
 .execution-queue-timeline {
   display: flex;
   justify-content: space-between;
+<<<<<<< HEAD
   margin-top: 8px;
 }
 
@@ -73,10 +131,19 @@
   width: 18px;
   text-align: center;
   font-size: 11px;
+=======
+  margin-top: 10px;
+}
+
+.execution-queue-timeline-marker {
+  width: 20px;
+  text-align: center;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-idle {
   position: absolute;
+<<<<<<< HEAD
   height: 35px;
   display: flex;
   justify-content: center;
@@ -85,22 +152,45 @@
   overflow: hidden;
   color: #000;
   font-size: 11px;
+=======
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  overflow: hidden;
+  color: #000;
+  font-size: 12px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-buttons {
   display: flex;
   justify-content: center;
+<<<<<<< HEAD
   gap: 12px;
   margin-top: 12px;
   flex-wrap: wrap;
+=======
+  margin-top: 20px;
+}
+
+.execution-buttons button {
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .execution-buttons button:disabled {
   cursor: not-allowed;
+<<<<<<< HEAD
   background-color: #cbd5e1;
   opacity: 0.6;
 }
 
+=======
+  background-color: #ccc;
+}
+/* src/components/css/executionQueue.css */
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 .gantt-bar.idle {
   background-color: #e0e0e0;
   color: #888;

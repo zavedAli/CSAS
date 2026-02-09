@@ -1,14 +1,23 @@
 // src/components/AlgorithmDetails.js
 import React from "react";
 import PropTypes from "prop-types";
+<<<<<<< HEAD
 import algorithmInfo from "../info/algoInfo.json";
 import "./css/algoDes.css";
 
 const AlgorithmDetails = ({ selectedAlgorithm, onSelectChange }) => {
+=======
+import algorithmInfo from "../info/algoInfo.json"; // Adjust the path if necessary
+import "./css/algoDes.css"; // Optional: create a CSS file for styling
+
+const AlgorithmDetails = ({ selectedAlgorithm }) => {
+  console.log(selectedAlgorithm);
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
   const algorithm = algorithmInfo.algorithms.find(
     (algo) => algo.name === selectedAlgorithm
   );
 
+<<<<<<< HEAD
   return (
     <div className="algorithm-details">
       <div className="flex items-center gap-3 mb-3">
@@ -53,13 +62,38 @@ const AlgorithmDetails = ({ selectedAlgorithm, onSelectChange }) => {
       {!algorithm && (
         <p className="text-slate-500 text-center py-4">Select an algorithm to see details.</p>
       )}
+=======
+  if (!algorithm) return <p>Select an algorithm to see details.</p>;
+
+  return (
+    <div className="algorithm-details">
+      <h2>{algorithm.name} Algorithm</h2>
+      <p>
+        <strong>Description:</strong> {algorithm.description}
+      </p>
+      <h3>Example:</h3>
+      <ul>
+        <h5>{algorithm.example.subDes}</h5>
+        {algorithm.example.processes.map((process) => (
+          <li key={process.id}>
+            Process ID: {process.id}, Arrival Time: {process.arrivalTime}, Burst
+            Time: {process.burstTime}, Priority: {process.priority || "N/A"}
+          </li>
+        ))}
+      </ul>
+      <h3>Execution Order:</h3>
+      <p>{algorithm.example.executionOrder.join(" -> ")}</p>
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
     </div>
   );
 };
 
 AlgorithmDetails.propTypes = {
   selectedAlgorithm: PropTypes.string.isRequired,
+<<<<<<< HEAD
   onSelectChange: PropTypes.func.isRequired,
+=======
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 };
 
 export default AlgorithmDetails;

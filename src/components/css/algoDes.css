@@ -1,4 +1,5 @@
 .algorithm-details {
+<<<<<<< HEAD
   margin: 12px 16px;
   padding: 16px;
   border: 1px solid #e2e8f0;
@@ -31,11 +32,23 @@
   font-size: 0.85em;
   color: #64748b;
   font-weight: 500;
+=======
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.algorithm-details h2 {
+  margin-top: 0;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
 
 .algorithm-details ul {
   list-style-type: none;
   padding: 0;
+<<<<<<< HEAD
   margin: 6px 0;
 }
 
@@ -43,4 +56,10 @@
   margin-bottom: 4px;
   font-size: 0.85em;
   color: #475569;
+=======
+}
+
+.algorithm-details li {
+  margin-bottom: 5px;
+>>>>>>> f9c1f0451182c729e58c1958980744ef0ca889c9
 }
