@@ -97,7 +97,7 @@ const ReportTable = ({ processes, selectedAlgorithm, onAutoStore }) => {
         Report Table
       </h3>
 
-      <div className="flex w-[70vw] m-auto">
+      <div className="overflow-x-auto w-full">
         <table className="report-table">
           <thead>
             <tr>

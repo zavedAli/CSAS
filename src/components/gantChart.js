@@ -50,10 +50,10 @@ const GanttChart = ({ processes }) => {
   }
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <div>
-        <div className="flex justify-between items-center pb-4 ps-10 pe-10">
-          <h3 className="flex gap-4 text-center sm:text-start text-[30px] sm:text-[40px] text-[#414040] items-center">
+        <div className="flex justify-between items-center pb-4 px-4">
+          <h3 className="flex gap-4 text-gray-300 text-center sm:text-start text-[30px] sm:text-[40px] text-[#414040] items-center">
             <span>Timeline Chart</span>
             <span>
               <MdOutlineTimeline />
@@ -61,49 +61,54 @@ const GanttChart = ({ processes }) => {
           </h3>
           <div className="text-right">
             <div className="text-sm text-gray-500">CPU Utilization</div>
-            <div className="text-2xl font-bold text-[#414040]">{cpuUtilization}%</div>
+            <div className="text-2xl font-bold text-gray-400 ">{cpuUtilization}%</div>
           </div>
         </div>
-        <div className="h-[1px] bg-[#cccccc] w-[75vw] m-auto mb-8"></div>
+        <div className="h-[1px] bg-[#30363d] max-w-full mx-auto mb-8"></div>
         <div className="gantt-chart">
-          {scheduledProcesses.map((process) => {
-            const { id, name, startTime, burstTime, color } = process;
-            const barStyle = {
-              left: ` ${(startTime / totalTime) * 100}%`,
-              width: ` ${(burstTime / totalTime) * 100}%`,
-              backgroundColor: color,
-            };
-            return (
-              <div key={id} className="gantt-bar" style={barStyle}>
-                <div className="gantt-bar-text">
-                  {name} (ID: {id})
-                </div>
-                <div className="gantt-bar-time">
-                  <span className="start-time">{startTime}</span>
-                  <span className="end-time">{startTime + burstTime}</span>
-                </div>
-              </div>
-            );
-          })}
+          {scheduledProcesses.length === 0 ? (
+            <div className="gantt-empty-state">No processes to display</div>
+          ) : (
+            <>
+              {scheduledProcesses.map((process) => {
+                const { id, name, startTime, burstTime, color } = process;
+                const barStyle = {
+                  left: ` ${(startTime / totalTime) * 100}%`,
+                  width: ` ${(burstTime / totalTime) * 100}%`,
+                  backgroundColor: color,
+                };
+                return (
+                  <div key={id} className="gantt-bar" style={barStyle}>
+                    <div className="gantt-bar-text">
+                      {name} (ID: {id})
+                    </div>
+                    <div className="gantt-bar-time">
+                      <span className="start-time">{startTime}</span>
+                      <span className="end-time">{startTime + burstTime}</span>
+                    </div>
+                  </div>
+                );
+              })}
         
-          {idleSegments.map((segment, index) => {
-            const { startTime, endTime } = segment;
-            const idleWidth = ((endTime - startTime) / totalTime) * 100;
-            const idleStyle = {
-              left: `${(startTime / totalTime) * 100}%`,
-              width: `${idleWidth}%`,
-              backgroundColor: "#ccc", // Idle color
-            };
-            return (
-              <div
-                key={`idle-${index}`}
-                className="gantt-idle"
-                style={idleStyle}
-              >
-                Idle
-              </div>
-            );
-          })}
+              {idleSegments.map((segment, index) => {
+                const { startTime, endTime } = segment;
+                const idleWidth = ((endTime - startTime) / totalTime) * 100;
+                const idleStyle = {
+                  left: `${(startTime / totalTime) * 100}%`,
+                  width: `${idleWidth}%`,
+                };
+                return (
+                  <div
+                    key={`idle-${index}`}
+                    className="gantt-idle"
+                    style={idleStyle}
+                  >
+                    Idle
+                  </div>
+                );
+              })}
+            </>
+          )}
         </div>
         <div className="gantt-timeline text-gray-300">
           {timeIntervals.map((time) => (
@@ -114,18 +119,17 @@ const GanttChart = ({ processes }) => {
           ))}
         </div>
         <div className="gantt-legend">
-          <div className="flex gap-1 items-center w-[60vw] m-auto">
-            <div className="h-[1px] w-[45vw] bg-[#bebebe]"></div>
+          <div className="flex gap-1 items-center max-w-full mx-auto px-4">
+            <div className="h-[1px] flex-1 bg-[#30363d]"></div>
             <div className="flex text-center">
-              <h3 className="w-[10vw] text-[15px] text-[#414040] ">
+              <h3 className="whitespace-nowrap px-4 text-[15px] text-[#414040] text-gray-300 ">
                 Process Legend
               </h3>
             </div>
-
-            <div className="h-[1px] w-[45vw] bg-[#bebebe]"></div>
+            <div className="h-[1px] flex-1 bg-[#30363d]"></div>
           </div>
 
-          <ul className="flex gap-4 font-sans text-[15px] ps-10 justify-center ">
+          <ul className="flex flex-wrap gap-4 font-sans text-[15px] px-4 justify-center ">
             {scheduledProcesses.map((process) => (
               <li
                 className="bg-[#8080804f] rounded-full py-2 px-5"

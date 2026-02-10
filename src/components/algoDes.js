@@ -19,11 +19,15 @@ const AlgorithmDetails = ({ selectedAlgorithm, onSelectChange }) => {
           className="flex-1 px-2 py-1.5 text-xs border border-slate-600 rounded-md bg-slate-900 font-medium text-slate-300 cursor-pointer hover:border-blue-500 focus:outline-none focus:border-blue-500 transition-all"
         >
           <option value="">Choose an Algorithm</option>
-          <option value="FCFS">FCFS (First Come First Serve)</option>
-          <option value="SJF">SJF (Shortest Job First)</option>
-          <option value="SRTF">SRTF (Shortest Remaining Time First)</option>
-          <option value="Priority">Priority Scheduling</option>
-          <option value="RR">Round Robin</option>
+          <optgroup label="Non-Preemptive" className="bg-slate-800 text-slate-300">
+            <option value="FCFS">FCFS (First Come First Serve)</option>
+            <option value="SJF">SJF (Shortest Job First)</option>
+            <option value="Priority">Priority Scheduling</option>
+          </optgroup>
+          <optgroup label="Preemptive" className="bg-slate-800 text-slate-300">
+            <option value="SRTF">SRTF (Shortest Remaining Time First)</option>
+            <option value="RR">Round Robin</option>
+          </optgroup>
         </select>
       </div>
 

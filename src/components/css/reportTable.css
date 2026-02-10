@@ -16,6 +16,7 @@
 
 .report-table {
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
   font-size: 0.8em;
 }

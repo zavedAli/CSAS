@@ -1,67 +1,93 @@
 // src/algorithm/srtf.js
 
 export const executeSRTF = (processes) => {
-  const ganttChart = [];
-  const processesWithRemaining = processes.map(p => ({
+  const timeline = [];
+  const processesWithMetrics = processes.map(p => ({
     ...p,
     remainingTime: p.burstTime,
     startTime: null,
     completionTime: null,
     waitingTime: 0,
     turnaroundTime: 0,
-    responseTime: null
+    responseTime: null,
+    firstExecutionTime: null
   }));
 
   let currentTime = 0;
   let completed = 0;
   const n = processes.length;
-  let lastProcess = null;
+  let currentProcess = null;
+  let segmentStart = 0;
 
   while (completed < n) {
-    const availableProcesses = processesWithRemaining.filter(
+    // Get all processes that have arrived and not completed
+    const availableProcesses = processesWithMetrics.filter(
       p => p.arrivalTime <= currentTime && p.remainingTime > 0
     );
 
+    // If no process available, jump to next arrival
     if (availableProcesses.length === 0) {
-      const nextArrival = processesWithRemaining
+      const nextArrival = processesWithMetrics
         .filter(p => p.remainingTime > 0)
         .sort((a, b) => a.arrivalTime - b.arrivalTime)[0];
-      currentTime = nextArrival.arrivalTime;
+      if (nextArrival) {
+        currentTime = nextArrival.arrivalTime;
+      }
       continue;
     }
 
-    const currentProcess = availableProcesses.sort(
-      (a, b) => a.remainingTime - b.remainingTime
+    // Select process with shortest remaining time (tie-break by arrival time, then ID)
+    const nextProcess = availableProcesses.sort(
+      (a, b) => a.remainingTime - b.remainingTime || a.arrivalTime - b.arrivalTime || a.id - b.id
     )[0];
 
-    if (currentProcess.startTime === null) {
-      currentProcess.startTime = currentTime;
-      currentProcess.responseTime = currentTime - currentProcess.arrivalTime;
-    }
-
-    if (lastProcess !== currentProcess.id) {
-      ganttChart.push({
+    // Context switch detected - save previous segment
+    if (currentProcess && nextProcess.id !== currentProcess.id) {
+      timeline.push({
         id: currentProcess.id,
         name: currentProcess.name,
-        startTime: currentTime,
-        endTime: currentTime + 1,
+        startTime: segmentStart,
+        endTime: currentTime,
         color: currentProcess.color
       });
-      lastProcess = currentProcess.id;
-    } else {
-      ganttChart[ganttChart.length - 1].endTime = currentTime + 1;
+      segmentStart = currentTime;
     }
 
-    currentProcess.remainingTime--;
-    currentTime++;
+    // Starting new process
+    if (!currentProcess || nextProcess.id !== currentProcess.id) {
+      currentProcess = nextProcess;
+      segmentStart = currentTime;
+      
+      // Track first execution for response time
+      if (currentProcess.firstExecutionTime === null) {
+        currentProcess.firstExecutionTime = currentTime;
+        currentProcess.responseTime = currentTime - currentProcess.arrivalTime;
+      }
+    }
 
+    // Execute for 1 time unit
+    currentProcess.remainingTime -= 1;
+    currentTime += 1;
+
+    // Process completed
     if (currentProcess.remainingTime === 0) {
       currentProcess.completionTime = currentTime;
       currentProcess.turnaroundTime = currentTime - currentProcess.arrivalTime;
       currentProcess.waitingTime = currentProcess.turnaroundTime - currentProcess.burstTime;
       completed++;
+
+      // Add final segment
+      timeline.push({
+        id: currentProcess.id,
+        name: currentProcess.name,
+        startTime: segmentStart,
+        endTime: currentTime,
+        color: currentProcess.color
+      });
+      
+      currentProcess = null;
     }
   }
 
-  return { processesWithRemaining, ganttChart };
+  return { processesWithMetrics, timeline };
 };

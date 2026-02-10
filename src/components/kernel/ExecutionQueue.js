@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { getNextProcess } from "../../algorithm/fcfs";
 import { getNextProcessSJF } from "../../algorithm/sjf";
 import { getNextProcessPriority } from "../../algorithm/priority";
+import { executeSRTF } from "../../algorithm/srtf";
 import ExecutionQueueControls from "./ExecutionQueueControls";
 import ExecutionQueueInfo from "./ExecutionQueueInfo";
 import ProcessStateDiagram from "../ProcessStateDiagram";
@@ -11,9 +12,7 @@ import Metrics from "../Metrics";
 import StepExplanation from "../StepExplanation";
 import "../css/executionQueue.css";
 import { GiProcessor } from "react-icons/gi";
-
-// Import the new function
-import { calculateMetrics } from "../../algorithm/processMetrics"; // <-- New import
+import { calculateMetrics } from "../../algorithm/processMetrics";
 
 const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, onStoreResult }) => {
   const [executedProcesses, setExecutedProcesses] = useState([]);
@@ -24,6 +23,8 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
   const [showReport, setShowReport] = useState(false);
   const [readyQueue, setReadyQueue] = useState([]);
   const [executionHistory, setExecutionHistory] = useState([]);
+  const [srtfFullTimeline, setSrtfFullTimeline] = useState([]);
+  const [srtfCurrentStep, setSrtfCurrentStep] = useState(0);
   const stepExplanationRef = React.useRef();
 
   useEffect(() => {
@@ -33,6 +34,8 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
     setShowReport(false);
     setReadyQueue([]);
     setExecutionHistory([]);
+    setSrtfFullTimeline([]);
+    setSrtfCurrentStep(0);
     
     const scheduleProcesses = () => {
       let sortedProcesses = processes.slice().sort((a, b) => a.arrivalTime - b.arrivalTime);
@@ -47,9 +50,54 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
       }));
     };
     setScheduledProcesses(scheduleProcesses());
+    
+    // Pre-calculate SRTF timeline
+    if (selectedAlgorithm === "SRTF" && processes.length > 0) {
+      const { timeline, processesWithMetrics } = executeSRTF(processes);
+      setSrtfFullTimeline(timeline);
+    }
   }, [processes, selectedAlgorithm]);
 
   const handleNext = () => {
+    if (selectedAlgorithm === "SRTF") {
+      if (srtfCurrentStep >= srtfFullTimeline.length) return;
+      
+      const segment = srtfFullTimeline[srtfCurrentStep];
+      const newHistory = executionHistory.concat([segment]);
+      setExecutionHistory(newHistory);
+      
+      const { processesWithMetrics } = executeSRTF(processes);
+      const updated = scheduledProcesses.map(p => {
+        const metrics = processesWithMetrics.find(pm => pm.id === p.id);
+        if (!metrics) return p;
+        
+        const historyForProcess = newHistory.filter(h => h.id === p.id);
+        const totalExecuted = historyForProcess.reduce((sum, h) => sum + (h.endTime - h.startTime), 0);
+        const remaining = p.burstTime - totalExecuted;
+        const isComplete = remaining === 0;
+        
+        return {
+          ...p,
+          remainingTime: remaining,
+          startTime: historyForProcess.length > 0 ? historyForProcess[0].startTime : null,
+          responseTime: historyForProcess.length > 0 ? historyForProcess[0].startTime - p.arrivalTime : null,
+          completionTime: isComplete ? metrics.completionTime : null,
+          turnaroundTime: isComplete ? metrics.turnaroundTime : null,
+          waitingTime: isComplete ? metrics.waitingTime : null,
+        };
+      });
+      
+      setScheduledProcesses(updated);
+      setCurrentTime(segment.endTime);
+      
+      const completedIds = updated.filter(p => p.remainingTime === 0).map(p => p.id);
+      setExecutedProcesses(completedIds);
+      
+      setSrtfCurrentStep(srtfCurrentStep + 1);
+      setAllProcessesScheduled(srtfCurrentStep + 1 >= srtfFullTimeline.length);
+      return;
+    }
+    
     if (selectedAlgorithm === "RR") {
       let queue = [...readyQueue];
       
@@ -165,6 +213,44 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
   };
 
   const handlePrevious = () => {
+    if (selectedAlgorithm === "SRTF") {
+      if (executionHistory.length === 0) return;
+      
+      const newHistory = executionHistory.slice(0, -1);
+      setExecutionHistory(newHistory);
+      
+      const { processesWithMetrics } = executeSRTF(processes);
+      const updated = scheduledProcesses.map(p => {
+        const metrics = processesWithMetrics.find(pm => pm.id === p.id);
+        if (!metrics) return p;
+        
+        const historyForProcess = newHistory.filter(h => h.id === p.id);
+        const totalExecuted = historyForProcess.reduce((sum, h) => sum + (h.endTime - h.startTime), 0);
+        const remaining = p.burstTime - totalExecuted;
+        const isComplete = remaining === 0;
+        
+        return {
+          ...p,
+          remainingTime: remaining,
+          startTime: historyForProcess.length > 0 ? historyForProcess[0].startTime : null,
+          responseTime: historyForProcess.length > 0 ? historyForProcess[0].startTime - p.arrivalTime : null,
+          completionTime: isComplete ? metrics.completionTime : null,
+          turnaroundTime: isComplete ? metrics.turnaroundTime : null,
+          waitingTime: isComplete ? metrics.waitingTime : null,
+        };
+      });
+      
+      setScheduledProcesses(updated);
+      setCurrentTime(newHistory.length > 0 ? newHistory[newHistory.length - 1].endTime : 0);
+      
+      const completedIds = updated.filter(p => p.remainingTime === 0).map(p => p.id);
+      setExecutedProcesses(completedIds);
+      
+      setSrtfCurrentStep(Math.max(0, srtfCurrentStep - 1));
+      setAllProcessesScheduled(false);
+      return;
+    }
+    
     if (selectedAlgorithm === "RR") {
       if (executionHistory.length === 0) return;
       
@@ -208,9 +294,6 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
     }
     const lastExecutedProcessId =
       executedProcesses[executedProcesses.length - 1];
-    const lastExecutedProcess = scheduledProcesses.find(
-      (process) => process.id === lastExecutedProcessId
-    );
 
     const updatedProcesses = scheduledProcesses.map((process) =>
       process.id === lastExecutedProcessId
@@ -219,8 +302,8 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
             startTime: null,
             completionTime: null,
             waitingTime: null,
-            responseTime: null, // <-- Reset response time
-            turnaroundTime: null, // <-- Reset turnaround time
+            responseTime: null,
+            turnaroundTime: null,
           }
         : process
     );
@@ -237,27 +320,38 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
         : 0;
 
     setCurrentTime(newCurrentTime);
-    setAllProcessesScheduled(false); // Reset when going back
+    setAllProcessesScheduled(false);
   };
 
   const handleGenerateReport = () => {
-    // Calculate metrics and generate report here
-    const metrics = calculateMetrics(
-      scheduledProcesses,
-      executedProcesses,
-      currentTime
-    );
+    let metrics;
+    
+    if (selectedAlgorithm === "SRTF") {
+      // For SRTF, use the already calculated metrics from scheduledProcesses
+      metrics = scheduledProcesses.filter(p => p.completionTime !== null);
+    } else if (selectedAlgorithm === "RR") {
+      // For RR, metrics are already in scheduledProcesses
+      metrics = scheduledProcesses.filter(p => p.completionTime !== null);
+    } else {
+      // For non-preemptive algorithms, calculate metrics
+      metrics = calculateMetrics(
+        scheduledProcesses,
+        executedProcesses,
+        currentTime
+      );
+    }
+    
     setReportData(metrics);
     setShowReport(true);
     console.log("Generating report for processes:", metrics);
   };
 
-  const displayedProcesses = selectedAlgorithm === "RR" 
+  const displayedProcesses = selectedAlgorithm === "RR" || selectedAlgorithm === "SRTF"
     ? executionHistory 
     : scheduledProcesses.filter((process) => executedProcesses.includes(process.id));
 
-  const totalTime = selectedAlgorithm === "RR" 
-    ? Math.max(currentTime, ...executionHistory.map(h => h.endTime))
+  const totalTime = selectedAlgorithm === "RR" || selectedAlgorithm === "SRTF"
+    ? Math.max(currentTime, ...executionHistory.map(h => h.endTime || 0), 0)
     : scheduledProcesses.reduce((maxTime, process) => Math.max(maxTime, process.completionTime ? process.completionTime : 0), 0);
 
   const arrivedProcesses = scheduledProcesses.filter(
@@ -312,27 +406,31 @@ const ExecutionQueue = ({ processes, isStarted, selectedAlgorithm, timeQuantum, 
       />
 
       <div className="gantt-chart">
-        {displayedProcesses.map((process, index) => {
-          const { id, name, startTime, color } = process;
-          const endTime = selectedAlgorithm === "RR" ? process.endTime : process.startTime + process.burstTime;
-          const duration = endTime - startTime;
-          const barStyle = {
-            left: `${(startTime / totalTime) * 100}%`,
-            width: `${(duration / totalTime) * 100}%`,
-            backgroundColor: color,
-          };
-          return (
-            <div key={selectedAlgorithm === "RR" ? `${id}-${index}` : id} className="gantt-bar" style={barStyle}>
-              <div className="gantt-bar-text">
-                {name} (ID: {id})
+        {displayedProcesses.length === 0 ? (
+          <div className="gantt-empty-state">No processes executed yet</div>
+        ) : (
+          displayedProcesses.map((process, index) => {
+            const { id, name, startTime, color } = process;
+            const endTime = selectedAlgorithm === "RR" || selectedAlgorithm === "SRTF" ? process.endTime : process.startTime + process.burstTime;
+            const duration = endTime - startTime;
+            const barStyle = {
+              left: `${(startTime / totalTime) * 100}%`,
+              width: `${(duration / totalTime) * 100}%`,
+              backgroundColor: color,
+            };
+            return (
+              <div key={selectedAlgorithm === "RR" || selectedAlgorithm === "SRTF" ? `${id}-${index}` : id} className="gantt-bar" style={barStyle}>
+                <div className="gantt-bar-text">
+                  {name} (ID: {id})
+                </div>
+                <div className="gantt-bar-time">
+                  <span className="start-time">{startTime}</span>
+                  <span className="end-time">{endTime}</span>
+                </div>
               </div>
-              <div className="gantt-bar-time">
-                <span className="start-time">{startTime}</span>
-                <span className="end-time">{endTime}</span>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
       <div className="gantt-timeline mb-10 text-gray-300">
         {Array.from({ length: totalTime + 1 }, (_, i) => (

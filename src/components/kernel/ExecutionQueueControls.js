@@ -31,7 +31,7 @@ const ExecutionQueueControls = ({
         <button
           className="flex justify-center items-center gap-1 p-2 text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white m-auto"
           onClick={handleGenerateReport}
-          disabled={executedProcesses.length !== scheduledProcesses.length}
+          disabled={scheduledProcesses.filter(p => p.completionTime !== null).length !== scheduledProcesses.length}
         >
           Generate Report <BsClipboardData />
         </button>
@@ -39,7 +39,7 @@ const ExecutionQueueControls = ({
           className="flex justify-center items-center gap-3 p-2 text-[16px] bg-[#1473E6] hover:bg-[#144ce6] w-1/6 rounded-lg text-white m-auto"
           onClick={handleNext}
           disabled={
-            !isStarted || executedProcesses.length === scheduledProcesses.length
+            !isStarted || scheduledProcesses.filter(p => p.completionTime !== null).length === scheduledProcesses.length
           }
         >
           Next <GrFormNextLink />
