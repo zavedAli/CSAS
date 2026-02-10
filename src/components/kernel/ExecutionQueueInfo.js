@@ -1,4 +1,4 @@
-// src/components/ExecutionQueueInfo.js
+
 import React from "react";
 import PropTypes from "prop-types";
 import "../css/executionQueue.css";
