@@ -85,7 +85,7 @@ const GanttChart = ({ processes }) => {
               </div>
             );
           })}
-          {/* Render idle segments */}
+        
           {idleSegments.map((segment, index) => {
             const { startTime, endTime } = segment;
             const idleWidth = ((endTime - startTime) / totalTime) * 100;
