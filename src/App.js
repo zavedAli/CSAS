@@ -10,6 +10,7 @@ import Navbar from "./components/navbar";
 import ConfirmModal from "./components/ConfirmModal";
 import StoredResults from "./components/StoredResults";
 import SampleDataModal from "./components/SampleDataModal";
+import AboutPage from "./components/AboutPage";
 
 const getStaticColor = (index) => {
   const colors = ["#1961b4", "#c42c22", "#0e7d44", "#8c5a18", "#7b06a6"];
@@ -49,6 +50,7 @@ function App() {
   const [storedResults, setStoredResults] = useState([]);
   const [showSampleModal, setShowSampleModal] = useState(false);
   const [isResultStored, setIsResultStored] = useState(false);
+  const [currentPage, setCurrentPage] = useState("home");
 
   const handleAddProcess = (newProcess) => {
     newProcess.color = getStaticColor(nextProcessId - 1);
@@ -145,9 +147,13 @@ function App() {
 
   return (
     <div className="min-h-screen pb-4">
-      <Navbar />
+      <Navbar onNavigate={setCurrentPage} currentPage={currentPage} />
       
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 w-full px-4 mx-auto mt-2 max-w-[1920px]">
+      {currentPage === "about" ? (
+        <AboutPage onNavigateHome={() => setCurrentPage("home")} />
+      ) : (
+        <>
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 w-full px-4 mx-auto mt-2 max-w-[1920px]">
         <div className="xl:col-span-1 space-y-4 xl:sticky xl:top-4 xl:self-start xl:max-h-[calc(100vh-2rem)] xl:overflow-y-auto">
           <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl">
             <div className="p-2 border-b border-slate-700">
@@ -213,6 +219,8 @@ function App() {
         onSelect={handleSelectSample}
         onClose={() => setShowSampleModal(false)}
       />
+        </>
+      )}
     </div>
   );
 }
